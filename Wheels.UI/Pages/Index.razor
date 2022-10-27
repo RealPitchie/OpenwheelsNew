@@ -9,7 +9,7 @@
         {
             foreach (var post in _posts)
             {
-                <MudCard Elevation="3" Style="margin: 15px; padding: 30px; border-radius: 10px">
+                <MudCard Class="hoverable-card" Elevation="3" Style="margin: 15px; padding: 30px; border-radius: 10px">
 
                     <MudCardMedia Image="@post.ImageFile[0]" Style="height: 400px"/>
                     <MudText Typo="Typo.h5" Style="text-align: center; margin: 15px auto; font-weight: bold">@post.Title      </MudText>
@@ -35,16 +35,16 @@
             ShowFirstButton="true"
             ShowLastButton="true"
             Variant="Variant.Filled" 
-            Count="@(postsCount / 10)" />
+            Count="@(_postsCount / 10)" />
     </div> 
 </div>
 
 @code{
-    List<Post> _posts = new List<Post>();
-    int postsCount;
+    List<Post> _posts = new();
+    int _postsCount;
     protected override async Task OnInitializedAsync()
     {
-        postsCount = PostService.GetPostsCount();
+        _postsCount = PostService.GetPostsCount();
         _posts = await PostService.GetPostsAsync(0);
     }
 
