@@ -1,7 +1,7 @@
 @import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+html, body, p, h1, h2, h3, h4, h5, span {
+    font-family: Ubuntu, sans-serif !important;
 }
 
 h1:focus {

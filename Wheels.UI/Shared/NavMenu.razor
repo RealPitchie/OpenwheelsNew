@@ -1,35 +1,98 @@
-﻿<div class="top-row ps-3 navbar navbar-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="">Wheels.UI</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-    </div>
+﻿<link href="css/sidebar.css" rel="stylesheet"/> 
+@* <div class="top-row ps-3 navbar navbar-dark"> *@
+@*     <div class="container-fluid"> *@
+@*         <a class="navbar-brand" href="">Survey.UI</a> *@
+@*         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu"> *@
+@*             <span class="navbar-toggler-icon"></span> *@
+@*         </button> *@
+@*     </div> *@
+@* </div> *@
+@* *@
+@* <div class="@NavMenuCssClass" @onclick="ToggleNavMenu"> *@
+@*     <nav class="flex-column"> *@
+@*         <div class="nav-item px-3"> *@
+@*             <NavLink class="nav-link" href="" Match="NavLinkMatch.All"> *@
+@*                 <span class="oi oi-home" aria-hidden="true"></span> Главная *@
+@*             </NavLink> *@
+@*         </div> *@
+@*         $1$ <div class="nav-item px-3"> #1# *@
+@*         $1$     <NavLink class="nav-link" href="surveys"> #1# *@
+@*         $1$         <span class="oi oi-plus" aria-hidden="true"></span> Опросы #1# *@
+@*         $1$     </NavLink> #1# *@
+@*         $1$ </div>  #1# *@
+@*     </nav> *@
+@* </div> *@ 
+<div class="area">
+    
 </div>
+<nav class="main-menu">
+    <ul>
+        <li>
+            <a href="/">
+                <i class="fa fa-home fa-2x"></i>
+                <span class="nav-text">
+                    Главная
+                </span>
+            </a>
+          
+        </li>
+        <li class="has-subnav">
+            <a href="/results">
+                <i class="fa fa-laptop fa-2x"></i>
+                <span class="nav-text">
+                    Результаты
+                </span>
+            </a>
+            
+        </li>
+         <li class="has-subnav">
+             <a href="/addSurvey">
+                 <i class="fa fa-file"></i>
+                 <span class="nav-text">
+                     Новый опрос
+                 </span>
+             </a>
+             
+         </li>
+    </ul>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
-    <nav class="flex-column">
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                <span class="oi oi-home" aria-hidden="true"></span> Home
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
-    </nav>
-</div>
-
+    <ul class="logout"> 
+            <AuthorizeView>
+                <Authorized>
+                    <li>
+                        <a href="Identity/Account/LogOut">
+                           <i class="fa fa-sign-out"></i>
+                           <span class="nav-text">
+                               Выход
+                           </span>
+                        </a>
+                    </li>
+                </Authorized>
+                <NotAuthorized>
+                    <li>
+                        <a href="Identity/Account/Register">
+                            <i class="fa fa-user-plus"></i>
+                            <span class="nav-text">
+                                Регистрация
+                            </span>
+                        </a>
+                    </li>
+                    <li>
+                         <a href="Identity/Account/Login">
+                           <i class="fa fa-sign-in" aria-hidden="true"></i>
+                            <span class="nav-text">
+                                Вход
+                            </span>
+                        </a>
+                    </li> 
+                </NotAuthorized>
+            </AuthorizeView> 
+        
+    </ul>
+</nav>
+ 
 @code {
-    private bool collapseNavMenu = true;
-
+    private bool collapseNavMenu = true; 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()

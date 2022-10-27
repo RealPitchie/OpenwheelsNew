@@ -1,9 +1,40 @@
 ﻿@page "/"
+@using Wheels.Domain.Models
+@using Wheels.Application.Services 
 
-<PageTitle>Index</PageTitle>
+@inject PostService PostService
+<div class="row"> 
+    <div class="col-md-8 offset-1">
+        @if (_posts.Count > 0)
+        {
+            foreach (var post in _posts)
+            {
+                <MudCard Elevation="3" Style="margin: 15px; padding: 30px; border-radius: 10px">
 
-<h1>Hello, world!</h1>
+                    <MudCardMedia Image="@post.ImageFile[0]" Style="height: 400px"/>
+                    <MudText Typo="Typo.h5">@post.Title</MudText>
+                    @foreach (var line in post.Text)
+                    {
+                        <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+                            @line
+                        </MudText>
+                    }
+                    <MudCardActions>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
+                        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+                    </MudCardActions>
+                </MudCard>
+            }
+        }
+    </div>
+    <div class="col-md-3"> 
+    </div>
+</div>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?"/>
+@code{
+    List<Post> _posts = new List<Post>();
+    protected override async Task OnInitializedAsync()
+    {
+        _posts = await PostService.GetPostsAsync();
+    }
+}

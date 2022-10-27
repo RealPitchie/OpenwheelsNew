@@ -11,6 +11,8 @@ services.AddEndpointsApiExplorer();
 services.AddDbContext<PostsContext>(options => 
     options.UseNpgsql("Server=localhost;Port=5432;Database=f1;User Id=root;Password=passmein123;"));
 services.AddSwaggerGen();
+
+
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var app = builder.Build();
 

@@ -1,0 +1,52 @@
+using Microsoft.EntityFrameworkCore;
+using Wheels.Application.Interfaces;
+using Wheels.Domain.Models;
+using Wheels.Persistence;
+
+namespace Wheels.Application.Services;
+
+public class PostService : IPostService
+{
+    private readonly PostsContext _context;
+
+    public PostService(PostsContext context)
+    {
+        _context = context;
+    }
+    public async Task AddCommentAsync(Comment comment)
+    {
+        await _context.AddAsync(comment);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task AddPostAsync(Post post)
+    {
+        await _context.Posts.AddAsync(post);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<Post> EditPostAsync(Post post)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Comment> EditCommentAsync(Comment comment)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<List<Post>> GetPostsAsync()
+    {
+        return await _context.Posts.ToListAsync();
+    }
+
+    public async Task<Post> GetPostAsync()
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<List<Comment>> GetCommentsByPostIdAsync(string targetPostId)
+    {
+        throw new NotImplementedException();
+    }
+}

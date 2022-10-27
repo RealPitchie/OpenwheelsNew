@@ -1,6 +1,6 @@
 namespace Wheels.Domain.Models;
 #nullable disable
-public class AppUser
+public class AppUser 
 {
     public string Id {get; set; }
     public string Nickname { get; set; }
