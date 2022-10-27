@@ -35,9 +35,13 @@ public class PostService : IPostService
         throw new NotImplementedException();
     }
 
-    public async Task<List<Post>> GetPostsAsync()
+    public async Task<List<Post>> GetPostsAsync(int pageNo)
     {
-        return await _context.Posts.ToListAsync();
+        return await _context.Posts
+            .OrderByDescending(p => p.Posted)
+            .Skip(pageNo * 10)
+            .Take(10)
+            .ToListAsync();
     }
 
     public async Task<Post> GetPostAsync()
@@ -48,5 +52,10 @@ public class PostService : IPostService
     public async Task<List<Comment>> GetCommentsByPostIdAsync(string targetPostId)
     {
         throw new NotImplementedException();
+    }
+
+    public int GetPostsCount()
+    {
+        return _context.Posts.Count();
     }
 }

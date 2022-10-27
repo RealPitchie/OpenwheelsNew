@@ -4,7 +4,7 @@
 
 @inject PostService PostService
 <div class="row"> 
-    <div class="col-md-8 offset-1">
+    <div class="col-md-8" style="margin: 0 auto">
         @if (_posts.Count > 0)
         {
             foreach (var post in _posts)
@@ -12,29 +12,44 @@
                 <MudCard Elevation="3" Style="margin: 15px; padding: 30px; border-radius: 10px">
 
                     <MudCardMedia Image="@post.ImageFile[0]" Style="height: 400px"/>
-                    <MudText Typo="Typo.h5">@post.Title</MudText>
-                    @foreach (var line in post.Text)
+                    <MudText Typo="Typo.h5" Style="text-align: center; margin: 15px auto; font-weight: bold">@post.Title      </MudText>
+                    <h4 style="right: 0; color: darkgray; font-size: x-small">@post.Posted.ToString("D")</h4>
+                    @foreach (var line in post.Text.Take(3))
                     {
                         <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
                             @line
                         </MudText>
                     }
+                    
                     <MudCardActions>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary">Share</MudButton>
-                        <MudButton Variant="Variant.Text" Color="Color.Primary">Learn More</MudButton>
+                        @if (post.Text.Length > 3)
+                        {
+                            <MudButton Variant="Variant.Text" Color="Color.Tertiary">Далее . . .</MudButton>
+                        }
                     </MudCardActions>
                 </MudCard>
             }
         }
-    </div>
-    <div class="col-md-3"> 
-    </div>
+        <MudPagination 
+            SelectedChanged="GetPosts"
+            ShowFirstButton="true"
+            ShowLastButton="true"
+            Variant="Variant.Filled" 
+            Count="@(postsCount / 10)" />
+    </div> 
 </div>
 
 @code{
     List<Post> _posts = new List<Post>();
+    int postsCount;
     protected override async Task OnInitializedAsync()
     {
-        _posts = await PostService.GetPostsAsync();
+        postsCount = PostService.GetPostsCount();
+        _posts = await PostService.GetPostsAsync(0);
+    }
+
+    async Task GetPosts(int pageNo)
+    {
+        _posts = await PostService.GetPostsAsync(pageNo - 1);
     }
 }
