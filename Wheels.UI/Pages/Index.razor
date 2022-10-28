@@ -13,7 +13,7 @@
                 <MudCard Class="hoverable-card" Elevation="3" Style="margin: 15px; padding: 30px; border-radius: 10px">
 
                     <MudCardMedia Image="@post.ImageFile[0]" Style="height: 400px"/>
-                    <MudText Typo="Typo.h5" Style="text-align: center; margin: 15px auto; font-weight: bold">@post.Title </MudText>
+                    <a href="/" @onclick="() => ViewPost(post.Id)"><h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @post.Title </h3></a>
                     <h4 style="text-align: right; color: darkgray; font-size: x-small">@post.Posted.ToString("D")</h4>
                     @foreach (var line in post.Text.Take(3))
                     {
