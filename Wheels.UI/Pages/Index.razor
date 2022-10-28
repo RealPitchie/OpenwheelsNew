@@ -14,7 +14,7 @@
 
                     <MudCardMedia Image="@post.ImageFile[0]" Style="height: 400px"/>
                     <MudText Typo="Typo.h5" Style="text-align: center; margin: 15px auto; font-weight: bold">@post.Title </MudText>
-                    <h4 style="right: 0; color: darkgray; font-size: x-small">@post.Posted.ToString("D")</h4>
+                    <h4 style="text-align: right; color: darkgray; font-size: x-small">@post.Posted.ToString("D")</h4>
                     @foreach (var line in post.Text.Take(3))
                     {
                         <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
@@ -25,7 +25,7 @@
                     <MudCardActions>
                         @if (post.Text.Length > 3)
                         {
-                            <MudButton Variant="Variant.Text" Color="Color.Tertiary">Далее . . .</MudButton>
+                            <MudButton Variant="Variant.Text" OnClick="() => ViewPost(post.Id)" Color="Color.Tertiary">Далее . . .</MudButton>
                         }
                     </MudCardActions>
                 </MudCard>
@@ -58,4 +58,10 @@
         _posts = await PostService.GetPostsAsync(pageNo - 1);
         NavManager.NavigateTo("/");
     }
+
+    private void ViewPost(string postId)
+    {
+        NavManager.NavigateTo("/view/" + postId);
+    }
+
 }

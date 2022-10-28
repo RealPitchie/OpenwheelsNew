@@ -9,6 +9,6 @@ public interface IPostService
     Task<Post> EditPostAsync(Post post);
     Task<Comment> EditCommentAsync(Comment comment);
     Task<List<Post>> GetPostsAsync(int pageNo);
-    Task<Post> GetPostAsync();
+    Task<Post> GetPostAsync(string postId);
     Task<List<Comment>> GetCommentsByPostIdAsync(string targetPostId);
 }

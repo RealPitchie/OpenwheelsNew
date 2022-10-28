@@ -1,0 +1,47 @@
+@page "/view/{postId}"
+
+@using Wheels.Domain.Models
+@using Wheels.Application.Services
+@using Wheels.UI.Components
+
+@inject PostService PostService
+
+<div> 
+    @if (_post == null)
+    { 
+        <PostNotFound />
+    }else if (_post.Text != null)
+    {
+        <div class="row">
+            <div class="col-md-8" style="margin: 0 auto">
+                <MudCard Class="hoverable-card" Elevation="3" Style="margin: 15px; padding: 30px; border-radius: 10px">
+
+                    <MudCardMedia Image="@_post.ImageFile[0]" Style="height: 400px"/>
+                    <MudText Typo="Typo.h5" Style="text-align: center; margin: 15px auto; font-weight: bold">@_post.Title </MudText>
+                    <h4 style="text-align: right; color: darkgray; font-size: x-small">@_post.Posted.ToString("D")</h4>
+                    @foreach (var line in _post.Text)
+                    {
+                        <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+                            @line
+                        </MudText>
+                    }
+                </MudCard>
+
+
+            </div>
+
+        </div>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string PostId { get; set; }
+
+    Post _post = new();
+    protected override async Task OnInitializedAsync()
+    {
+        _post = await PostService.GetPostAsync(PostId);
+    }
+
+}

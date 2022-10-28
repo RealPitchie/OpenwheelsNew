@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Wheels.Application.Interfaces;
 using Wheels.Domain.Models;
 using Wheels.Persistence;
-
+#nullable disable
 namespace Wheels.Application.Services;
 
 public class PostService : IPostService
@@ -44,9 +44,9 @@ public class PostService : IPostService
             .ToListAsync();
     }
 
-    public async Task<Post> GetPostAsync()
+    public async Task<Post> GetPostAsync(string postId)
     {
-        throw new NotImplementedException();
+        return await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
     }
 
     public async Task<List<Comment>> GetCommentsByPostIdAsync(string targetPostId)
