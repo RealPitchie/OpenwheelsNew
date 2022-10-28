@@ -13,6 +13,13 @@ public class Post
     public int Rating { get; set; }
          
     public string Author { get; set; }
-    public string AuthorAvatar { get; set; } 
-        
+    public string AuthorAvatar { get; set; }
+    public List<Comment> Comments { get; set; }
+
+    public Post()
+    {
+        Id = Guid.NewGuid().ToString();
+        Comments = new List<Comment>();
+    }
+
 }

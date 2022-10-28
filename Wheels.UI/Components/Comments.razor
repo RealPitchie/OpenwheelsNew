@@ -1,0 +1,32 @@
+@using Wheels.Domain.Models
+@using Wheels.Application.Services
+@namespace Wheels.UI.Components
+
+@inject PostService PostService
+
+<div>
+    @if (_comments.Count > 0)
+    {
+        foreach (var comment in _comments)
+        {
+            <MudPaper Elevation="1" MinWidth="500px" Style="padding: 15px; margin: 15px 0 0 0 ">
+                @foreach (var line in comment.Text.Split('\n'))
+                {
+                    <p>@line</p>
+                }
+            </MudPaper>
+        }
+    }
+    
+</div>
+
+@code {
+    [Parameter]
+    public string PostId { get; set; }
+    List<Comment> _comments = new();
+    protected override async Task OnInitializedAsync()
+    {
+        _comments = await PostService.GetCommentsByPostIdAsync(PostId);
+    }
+
+}

@@ -13,9 +13,9 @@ public class PostService : IPostService
     {
         _context = context;
     }
-    public async Task AddCommentAsync(Comment comment)
+    public async Task AddCommentAsync(Post post)
     {
-        await _context.AddAsync(comment);
+        _context.Update(post);
         await _context.SaveChangesAsync();
     }
 
@@ -51,7 +51,8 @@ public class PostService : IPostService
 
     public async Task<List<Comment>> GetCommentsByPostIdAsync(string targetPostId)
     {
-        throw new NotImplementedException();
+        var post = await _context.Posts.Include(p => p.Comments).FirstOrDefaultAsync(p => p.Id == targetPostId);
+        return post != null ? post.Comments : new List<Comment>();
     }
 
     public int GetPostsCount()

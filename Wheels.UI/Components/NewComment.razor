@@ -1,0 +1,26 @@
+@using Wheels.Domain.Models
+@namespace Wheels.UI.Components
+@inject NavigationManager NavManager
+
+<div>
+    <MudTextField T="string" Lines="3" @bind-Value="_newComment.Text" Placeholder="Новый комментарий"/>
+    <MudDivider Light="true" Style="margin-bottom: 15px"/>
+    <MudFab Color="Color.Primary" Size="Size.Small" OnClick="Submit" ButtonType="ButtonType.Submit" Label="Сохранить"></MudFab>
+</div>
+
+
+@code {
+    [Parameter]
+    public Post Post { get; set; }
+    [Parameter]
+    public EventCallback<Comment> AddComment { get; set; }
+    private Comment _newComment = new() {Id = Guid.NewGuid().ToString()} ;
+    
+    public void Submit()
+    {
+        AddComment.InvokeAsync(_newComment);
+        NavManager.NavigateTo("/view/" + Post.Id, true);
+    }
+
+    
+}

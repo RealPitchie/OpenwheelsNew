@@ -29,7 +29,13 @@
 
 
             </div>
-
+            <div class="col-md-8" style="margin: 0 auto; width: 50%">
+                <Comments PostId="@_post.Id" />
+                <NewComment Post="_post" AddComment="SaveComment"/>
+            </div>
+        </div>
+        <div class="row">
+            
         </div>
     }
 </div>
@@ -44,4 +50,9 @@
         _post = await PostService.GetPostAsync(PostId);
     }
 
+    async Task SaveComment(Comment comment)
+    {
+        _post.Comments.Add(comment);
+        await PostService.AddCommentAsync(_post);
+    }
 }

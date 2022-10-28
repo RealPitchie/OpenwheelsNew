@@ -4,7 +4,7 @@ namespace Wheels.Application.Interfaces;
 
 public interface IPostService
 {
-    Task AddCommentAsync(Comment comment);
+    Task AddCommentAsync(Post post);
     Task AddPostAsync(Post post);
     Task<Post> EditPostAsync(Post post);
     Task<Comment> EditCommentAsync(Comment comment);
