@@ -9,7 +9,7 @@
     {
         foreach (var comment in _comments)
         {
-            <MudPaper Elevation="1" MinWidth="500px" Style="padding: 15px; margin: 15px 0 0 0 ">
+            <MudPaper Elevation="1" MaxWidth="500px" Style="padding: 15px; margin: 15px 0 0 0 ">
                 @foreach (var line in comment.Text.Split('\n'))
                 {
                     <p>@line</p>

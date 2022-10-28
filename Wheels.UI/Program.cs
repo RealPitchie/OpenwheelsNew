@@ -28,7 +28,7 @@ services.AddMudServices();
 services.AddDbContext<PostsContext>(options => 
     options.UseNpgsql(connectionString));
 services.AddScoped<PostService>();
-
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

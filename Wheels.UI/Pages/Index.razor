@@ -10,7 +10,7 @@
         {
             foreach (var post in _posts)
             {
-                <MudCard Class="hoverable-card" Elevation="3" Style="margin: 15px; padding: 30px; border-radius: 10px">
+                <MudCard Class="hoverable-card" Elevation="3" Style="border-radius: 10px">
 
                     <MudCardMedia Image="@post.ImageFile[0]" Style="height: 400px"/>
                     <a href="/" @onclick="() => ViewPost(post.Id)"><h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @post.Title </h3></a>
