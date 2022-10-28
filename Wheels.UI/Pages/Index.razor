@@ -3,6 +3,7 @@
 @using Wheels.Application.Services 
 
 @inject PostService PostService
+@inject NavigationManager NavManager
 <div class="row"> 
     <div class="col-md-8" style="margin: 0 auto">
         @if (_posts.Count > 0)
@@ -12,7 +13,7 @@
                 <MudCard Class="hoverable-card" Elevation="3" Style="margin: 15px; padding: 30px; border-radius: 10px">
 
                     <MudCardMedia Image="@post.ImageFile[0]" Style="height: 400px"/>
-                    <MudText Typo="Typo.h5" Style="text-align: center; margin: 15px auto; font-weight: bold">@post.Title      </MudText>
+                    <MudText Typo="Typo.h5" Style="text-align: center; margin: 15px auto; font-weight: bold">@post.Title </MudText>
                     <h4 style="right: 0; color: darkgray; font-size: x-small">@post.Posted.ToString("D")</h4>
                     @foreach (var line in post.Text.Take(3))
                     {
@@ -20,7 +21,7 @@
                             @line
                         </MudText>
                     }
-                    
+
                     <MudCardActions>
                         @if (post.Text.Length > 3)
                         {
@@ -30,18 +31,22 @@
                 </MudCard>
             }
         }
-        <MudPagination 
+        
+    </div>
+    <div style="text-align: center">
+        <MudPagination
+            Size="Size.Small"
             SelectedChanged="GetPosts"
             ShowFirstButton="true"
             ShowLastButton="true"
-            Variant="Variant.Filled" 
-            Count="@(_postsCount / 10)" />
-    </div> 
+            Variant="Variant.Filled"
+            Count="@(_postsCount / 10)"/>
+    </div>
 </div>
 
 @code{
     List<Post> _posts = new();
-    int _postsCount;
+    int _postsCount; 
     protected override async Task OnInitializedAsync()
     {
         _postsCount = PostService.GetPostsCount();
@@ -49,7 +54,8 @@
     }
 
     async Task GetPosts(int pageNo)
-    {
+    { 
         _posts = await PostService.GetPostsAsync(pageNo - 1);
+        NavManager.NavigateTo("/");
     }
 }
