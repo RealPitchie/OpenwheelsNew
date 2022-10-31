@@ -25,9 +25,10 @@ public class PostService : IPostService
         await _context.SaveChangesAsync();
     }
 
-    public async Task<Post> EditPostAsync(Post post)
+    public async Task  EditPostAsync(Post post)
     {
-        throw new NotImplementedException();
+        _context.Posts.Update(post);
+        await _context.SaveChangesAsync();
     }
 
     public async Task<Comment> EditCommentAsync(Comment comment)

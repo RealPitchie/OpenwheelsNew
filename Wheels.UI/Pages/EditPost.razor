@@ -1,0 +1,41 @@
+@page "/edit/{postId}"
+@using Wheels.Domain.Models
+@using Wheels.Application.Services
+@using System.Text
+@inject PostService PostService
+
+@if (_post.Text != null)
+{
+    <div class="row" style="width: 60%; margin: 0 auto">
+    
+        <MudPaper Elevation="2" Style="padding: 5%">
+            <MudText Typo="Typo.subtitle2">Редактирование поста</MudText>
+            <MudTextField HelperText="Заголовок" T="string" @bind-Value="_post.Title"/>
+            <MudTextField Lines="15" HelperText="Текст поста" T="string" @bind-Value="@_text">@_text</MudTextField>  
+            <MudButton ButtonType="ButtonType.Submit" Color="Color.Primary" OnClick="Submit" Variant="Variant.Text">
+                Сохранить
+            </MudButton>
+        </MudPaper>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public string PostId { get; set; }
+    string _text = string.Empty;
+
+    Post _post = new();
+    protected override async Task OnInitializedAsync()
+    {
+        _post = await PostService.GetPostAsync(PostId);
+        _text = string.Join('\n', _post.Text);
+    }
+
+    private async Task Submit()
+    {
+        _post.Text = _text.Split('\n').ToArray();
+        await PostService.EditPostAsync(_post);
+    }
+
+}

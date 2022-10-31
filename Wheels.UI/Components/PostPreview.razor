@@ -1,0 +1,51 @@
+@using Wheels.Domain.Models
+@namespace Wheels.UI.Components
+@inject NavigationManager NavManager
+ 
+<MudCard Class="hoverable-card" Elevation="3" Style="border-radius: 10px">
+    
+    <MudCardMedia Image="@Post.ImageFile[0]" Style="height: 400px"/>
+    <a href="/" @onclick="() => ViewPost(Post.Id)"><h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @Post.Title </h3></a>
+    <h4 style="text-align: right; color: darkgray; font-size: x-small">@Post.Posted.ToString("D")</h4>
+    @foreach (var line in Post.Text.Take(3))
+    {
+        <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+            @line
+        </MudText>
+    }
+    <div class="row" style="justify-content: flex-end; margin-bottom: 15px">
+        <div class="col-md-4" style="width: fit-content">
+            <MudTooltip Text="Редактировать">
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="() => EditPost(Post)" Size="Size.Small" aria-label="delete"></MudIconButton>
+            </MudTooltip>
+            <MudTooltip Text="Удалить">
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" aria-label="delete"></MudIconButton>
+            </MudTooltip>
+            
+            
+
+        </div>
+    </div>
+    <MudCardActions>
+        @if (Post.Text.Length > 3)
+        {
+            <MudButton Variant="Variant.Text" OnClick="() => ViewPost(Post.Id)" Color="Color.Tertiary">Далее . . .</MudButton>
+        }
+    </MudCardActions>
+</MudCard>
+
+@code {
+    [Parameter]
+    public Post Post { get; set; } 
+    
+    private void ViewPost(string postId)
+    {
+        NavManager.NavigateTo("/view/" + postId);
+    }
+
+    private void EditPost(Post post)
+    {
+        NavManager.NavigateTo("/edit/" + Post.Id);
+    }
+
+}

@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Wheels.Domain.Models
 @using Wheels.Application.Services 
+@using Wheels.UI.Components
 
 @inject PostService PostService
 @inject NavigationManager NavManager
@@ -10,25 +11,7 @@
         {
             foreach (var post in _posts)
             {
-                <MudCard Class="hoverable-card" Elevation="3" Style="border-radius: 10px">
-
-                    <MudCardMedia Image="@post.ImageFile[0]" Style="height: 400px"/>
-                    <a href="/" @onclick="() => ViewPost(post.Id)"><h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @post.Title </h3></a>
-                    <h4 style="text-align: right; color: darkgray; font-size: x-small">@post.Posted.ToString("D")</h4>
-                    @foreach (var line in post.Text.Take(3))
-                    {
-                        <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
-                            @line
-                        </MudText>
-                    }
-
-                    <MudCardActions>
-                        @if (post.Text.Length > 3)
-                        {
-                            <MudButton Variant="Variant.Text" OnClick="() => ViewPost(post.Id)" Color="Color.Tertiary">Далее . . .</MudButton>
-                        }
-                    </MudCardActions>
-                </MudCard>
+                <PostPreview Post="post" />
             }
         }
         
@@ -59,9 +42,6 @@
         NavManager.NavigateTo("/");
     }
 
-    private void ViewPost(string postId)
-    {
-        NavManager.NavigateTo("/view/" + postId);
-    }
+    
 
 }
