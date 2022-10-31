@@ -8,14 +8,13 @@ public class Post
     public string Subtitle { get; set; }
     public string[] Text { get; set; }
     public string[] ImageFile { get; set; } = new string[10];
-    public string VideoLink { get; set; }
-         
+    public string VideoLink { get; set; } 
     public int Rating { get; set; }
          
     public string Author { get; set; }
     public string AuthorAvatar { get; set; }
     public List<Comment> Comments { get; set; }
-
+    public bool WasDeleted { get; set; }
     public Post()
     {
         Id = Guid.NewGuid().ToString();

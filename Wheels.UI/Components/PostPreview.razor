@@ -1,5 +1,8 @@
 @using Wheels.Domain.Models
+@using Wheels.Application.Services
 @namespace Wheels.UI.Components
+
+@inject PostService PostService
 @inject NavigationManager NavManager
  
 <MudCard Class="hoverable-card" Elevation="3" Style="border-radius: 10px">
@@ -19,7 +22,7 @@
                 <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="() => EditPost(Post)" Size="Size.Small" aria-label="delete"></MudIconButton>
             </MudTooltip>
             <MudTooltip Text="Удалить">
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" Size="Size.Small" aria-label="delete"></MudIconButton>
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeletePost(Post)" Size="Size.Small" aria-label="delete"></MudIconButton>
             </MudTooltip>
             
             
@@ -46,6 +49,11 @@
     private void EditPost(Post post)
     {
         NavManager.NavigateTo("/edit/" + Post.Id);
+    }
+
+    private async Task  DeletePost(Post post)
+    {
+        await PostService.DeletePost(post);
     }
 
 }

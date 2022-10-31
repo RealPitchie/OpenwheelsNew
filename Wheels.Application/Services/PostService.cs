@@ -25,6 +25,13 @@ public class PostService : IPostService
         await _context.SaveChangesAsync();
     }
 
+    public async Task DeletePost(Post post)
+    {
+        post.WasDeleted = true;
+        _context.Update(post);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task  EditPostAsync(Post post)
     {
         _context.Posts.Update(post);
@@ -39,6 +46,7 @@ public class PostService : IPostService
     public async Task<List<Post>> GetPostsAsync(int pageNo)
     {
         return await _context.Posts
+            .Where(p => !p.WasDeleted)
             .OrderByDescending(p => p.Posted)
             .Skip(pageNo * 10)
             .Take(10)
