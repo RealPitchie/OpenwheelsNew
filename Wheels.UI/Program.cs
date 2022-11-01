@@ -6,23 +6,29 @@ using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using Wheels.Application.Services;
+using Wheels.Domain.Models;
 using Wheels.Persistence;
 using Wheels.UI.Areas.Identity;
 using Wheels.UI.Data;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args); 
 var services = builder.Services;
-// Add services to the container.
 const string connectionString = "Server=localhost;Port=5432;Database=f1;User Id=root;Password=passmein123;";
 services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
-services.AddDatabaseDeveloperPageExceptionFilter();
-services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    options.UseNpgsql(connectionString));
+services.AddDefaultIdentity<AppUser>(options => 
+        options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+// Add services to the container.
+
+services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlite(connectionString));
+services.AddDatabaseDeveloperPageExceptionFilter(); 
 services.AddRazorPages();
 services.AddServerSideBlazor();
 services
-    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
+    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AppUser>>();
 services.AddSingleton<WeatherForecastService>();
 services.AddMudServices();
 services.AddDbContext<PostsContext>(options => 

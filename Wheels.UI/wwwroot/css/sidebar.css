@@ -18,6 +18,7 @@
 .main-menu:hover,nav.main-menu.expanded {
     width:250px;
     overflow:visible;
+    opacity: 75%;
 }
 
 .main-menu {

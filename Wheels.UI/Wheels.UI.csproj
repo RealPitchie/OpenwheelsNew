@@ -12,13 +12,19 @@
         <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.1" />
         <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.1" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.1" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.1" />
+        <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.2" />
         <PackageReference Include="MudBlazor" Version="6.0.17" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Wheels.Application\Wheels.Application.csproj" />
       <ProjectReference Include="..\Wheels.Domain\Wheels.Domain.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Pages\Identity" />
     </ItemGroup>
 
 </Project>

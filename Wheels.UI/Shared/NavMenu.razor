@@ -1,27 +1,7 @@
-﻿<link href="css/sidebar.css" rel="stylesheet"/> 
-@* <div class="top-row ps-3 navbar navbar-dark"> *@
-@*     <div class="container-fluid"> *@
-@*         <a class="navbar-brand" href="">Survey.UI</a> *@
-@*         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu"> *@
-@*             <span class="navbar-toggler-icon"></span> *@
-@*         </button> *@
-@*     </div> *@
-@* </div> *@
-@* *@
-@* <div class="@NavMenuCssClass" @onclick="ToggleNavMenu"> *@
-@*     <nav class="flex-column"> *@
-@*         <div class="nav-item px-3"> *@
-@*             <NavLink class="nav-link" href="" Match="NavLinkMatch.All"> *@
-@*                 <span class="oi oi-home" aria-hidden="true"></span> Главная *@
-@*             </NavLink> *@
-@*         </div> *@
-@*         $1$ <div class="nav-item px-3"> #1# *@
-@*         $1$     <NavLink class="nav-link" href="surveys"> #1# *@
-@*         $1$         <span class="oi oi-plus" aria-hidden="true"></span> Опросы #1# *@
-@*         $1$     </NavLink> #1# *@
-@*         $1$ </div>  #1# *@
-@*     </nav> *@
-@* </div> *@ 
+﻿@using System.Security.Claims
+@inject AuthenticationStateProvider AuthenticationStateProvider
+<link href="css/sidebar.css" rel="stylesheet"/> 
+ 
 <div class="area">
     
 </div>
@@ -60,11 +40,19 @@
             <AuthorizeView>
                 <Authorized>
                     <li>
-                        <a href="Identity/Account/LogOut">
-                           <i class="fa fa-sign-out"></i>
+                        <a href=" ">
+                           <i class="fa fa-user"></i>
                            <span class="nav-text">
-                               Выход
+                               @_userName
                            </span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/logout">
+                            <i class="fa fa-sign-out"></i>
+                            <span class="nav-text">
+                                Выход
+                            </span>
                         </a>
                     </li>
                 </Authorized>
@@ -78,7 +66,7 @@
                         </a>
                     </li>
                     <li>
-                         <a href="Identity/Account/Login">
+                         <a href="/login">
                            <i class="fa fa-sign-in" aria-hidden="true"></i>
                             <span class="nav-text">
                                 Вход
@@ -94,6 +82,23 @@
 @code {
     private bool collapseNavMenu = true; 
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+    string _userName = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var claims = user.Claims;
+
+        if (user.Identity.IsAuthenticated)
+        {
+            _userName = user.FindFirst(c => c.Type == ClaimTypes.Name).Value;
+        }
+        else
+        {
+            var authMessage = "The user is NOT authenticated.";
+        }
+    }
 
     private void ToggleNavMenu()
     {
