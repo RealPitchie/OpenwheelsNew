@@ -24,7 +24,17 @@
             <MudTooltip Text="Удалить">
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeletePost(Post)" Size="Size.Small" aria-label="delete"></MudIconButton>
             </MudTooltip>
-            
+            <MudMessageBox @ref="mbox" Title="Внимание" CancelText="Cancel">
+                <MessageContent>
+                    Вы действительно хотите удалить этот пост?
+                </MessageContent>
+                <YesButton>
+                    <MudButton Size="Size.Small" Variant="Variant.Text" Color="Color.Error" >Удалить</MudButton>
+                </YesButton>
+                <CancelButton>
+                    <MudButton Size="Size.Small" Variant="Variant.Text" >Отмена</MudButton>
+                </CancelButton>
+            </MudMessageBox>
             
 
         </div>
@@ -40,7 +50,7 @@
 @code {
     [Parameter]
     public Post Post { get; set; } 
-    
+    MudMessageBox mbox { get; set; }
     private void ViewPost(string postId)
     {
         NavManager.NavigateTo("/view/" + postId);
@@ -53,7 +63,10 @@
 
     private async Task  DeletePost(Post post)
     {
-        await PostService.DeletePost(post);
-    }
-
+        var result = await mbox.Show();
+        if (result == true)
+        {
+            await PostService.DeletePost(post);
+        } 
+    } 
 }
