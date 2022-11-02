@@ -40,7 +40,7 @@
             <AuthorizeView>
                 <Authorized>
                     <li>
-                        <a href=" ">
+                        <a href="/manageAccount">
                            <i class="fa fa-user"></i>
                            <span class="nav-text">
                                @_userName
@@ -80,9 +80,9 @@
 </nav>
  
 @code {
-    private bool collapseNavMenu = true; 
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-    string _userName = "";
+    private bool _collapseNavMenu = true; 
+    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
+    string? _userName = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -90,19 +90,15 @@
         var user = authState.User;
         var claims = user.Claims;
 
-        if (user.Identity.IsAuthenticated)
+        if (user.Identity is {IsAuthenticated: true })
         {
-            _userName = user.FindFirst(c => c.Type == "Nickname").Value;
-        }
-        else
-        {
-            var authMessage = "The user is NOT authenticated.";
+            _userName = user.FindFirst(c => c.Type == "Nickname")?.Value;
         }
     }
 
     private void ToggleNavMenu()
     {
-        collapseNavMenu = !collapseNavMenu;
+        _collapseNavMenu = !_collapseNavMenu;
     }
 
 }

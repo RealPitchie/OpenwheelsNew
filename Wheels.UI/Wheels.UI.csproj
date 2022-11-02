@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Pages\Identity" />
+      <Folder Include="wwwroot\avatars" />
     </ItemGroup>
 
 </Project>

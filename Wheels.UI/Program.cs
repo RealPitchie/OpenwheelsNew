@@ -16,19 +16,21 @@ var services = builder.Services;
 const string connectionString = "Server=localhost;Port=5432;Database=f1;User Id=root;Password=passmein123;";
 services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString));
-services.AddDefaultIdentity<AppUser>(options => 
-        options.SignIn.RequireConfirmedAccount = true)
+services.AddDefaultIdentity<AppUser>(options =>
+        {
+            options.SignIn.RequireConfirmedAccount = false;
+            options.SignIn.RequireConfirmedEmail = false;
+            options.User.RequireUniqueEmail = true;
+            options.Password.RequireNonAlphanumeric = false;
+            options.Password.RequiredLength = 6;
+        }
+    )
     .AddEntityFrameworkStores<ApplicationDbContext>();
-
-// Add services to the container.
-
-services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlite(connectionString));
+ 
 services.AddDatabaseDeveloperPageExceptionFilter(); 
 services.AddRazorPages();
 services.AddServerSideBlazor();
-services
-    .AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AppUser>>();
+services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AppUser>>();
 services.AddSingleton<WeatherForecastService>();
 services.AddMudServices();
 services.AddDbContext<PostsContext>(options => 
@@ -52,6 +54,7 @@ else
 app.UseHttpsRedirection();
 
 app.UseStaticFiles();
+
 
 app.UseRouting();
 

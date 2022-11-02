@@ -1,0 +1,39 @@
+@page "/manageAccount"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@using Wheels.UI.Data
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject UserManager<AppUser> UserManager 
+
+<style>
+    .mud-divider{
+        margin: 15px auto;
+    }
+</style>
+<h3>Управление учетной записью</h3>
+
+<MudPaper Elevation="0" Style="padding: 25px; margin: 15px">
+    <div class="row" >
+         
+        <div class="col-md-4 ">
+            
+                <h5>Имя пользователя</h5>
+                <strong>@user.Nickname</strong>
+                <MudDivider Light="true"/>
+                <h5>Аватар</h5>
+                <MudImage Height="50" Width="50" Src=@("/avatars/" + user?.UserAvatar) />
+            
+        </div>
+    </div> 
+</MudPaper>
+@code {
+    AppUser? user = new();
+    protected override async Task OnInitializedAsync()
+    { 
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var principal = authState.User;
+        user = await UserManager.GetUserAsync(principal);
+       
+    }
+
+}

@@ -5,7 +5,7 @@
 @inject PostService PostService
 @inject NavigationManager NavManager
  
-<MudCard Class="hoverable-card" Elevation="3" Style="border-radius: 10px">
+<MudCard Class="hoverable-card" Elevation="0" Style="border-radius: 10px">
     
     <MudCardMedia Image="@Post.ImageFile[0]" Style="height: 400px"/>
     <a href="/" @onclick="() => ViewPost(Post.Id)"><h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @Post.Title </h3></a>

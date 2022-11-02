@@ -16,15 +16,18 @@
         }
         
     </div>
-    <div style="text-align: center">
-        <MudPagination
-            Size="Size.Small"
-            SelectedChanged="GetPosts"
-            ShowFirstButton="true"
-            ShowLastButton="true"
-            Variant="Variant.Filled"
-            Count="@(_postsCount / 10)"/>
-    </div>
+   @if (_postsCount > 10)
+   {
+       <div style="text-align: center">
+           <MudPagination
+               Size="Size.Small"
+               SelectedChanged="GetPosts"
+               ShowFirstButton="true"
+               ShowLastButton="true"
+               Variant="Variant.Filled"
+               Count="@(_postsCount / 10)"/>
+       </div>
+   }
 </div>
 
 @code{
