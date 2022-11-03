@@ -88,3 +88,7 @@ a, .btn-link {
 .form-floating{
     margin-bottom: 15px;
 }
+.header{
+    min-height: 10vh;
+    background-color: #F8F8FF;
+}

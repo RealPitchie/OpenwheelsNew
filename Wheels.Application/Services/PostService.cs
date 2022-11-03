@@ -53,6 +53,24 @@ public class PostService : IPostService
             .ToListAsync();
     }
 
+    public async Task<List<Post>> GetPostsByWeeks(int weeksToShow, int pageNo)
+    {
+        return await _context.Posts
+            .Where(p => p.Posted >= DateTime.Now.AddDays(weeksToShow * 7))
+            .OrderByDescending(p => p.Posted)
+            .Skip(pageNo *10)
+            .Take(10)
+            .ToListAsync();
+    }
+
+    public async Task<List<Post>> GetPostsByRatingAsync()
+    {
+        return await _context.Posts
+            .OrderByDescending(p => p.Rating)
+            .Take(10)
+            .ToListAsync();
+    }
+
     public async Task<Post> GetPostAsync(string postId)
     {
         return await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
