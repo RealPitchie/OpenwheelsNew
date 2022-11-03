@@ -10,11 +10,23 @@
     <MudCardMedia Image="@Post.ImageFile[0]" Style="height: 400px"/>
     <a href="/" @onclick="() => ViewPost(Post.Id)"><h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @Post.Title </h3></a>
     <h4 style="text-align: right; color: darkgray; font-size: x-small">@Post.Posted.ToString("D")</h4>
-    @foreach (var line in Post.Text.Take(3))
+    @if (showFullText)
     {
-        <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
-            @line
-        </MudText>
+        @foreach (var line in Post.Text)
+        {
+            <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+                @line
+            </MudText>
+        }
+    }
+    else
+    {
+        foreach (var line in Post.Text.Take(3))
+        {
+            <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+                @line
+            </MudText>
+        }
     }
     <div class="row" style="justify-content: flex-end; margin-bottom: 15px">
         <div class="col-md-4" style="width: fit-content">
@@ -40,9 +52,9 @@
         </div>
     </div>
     <MudCardActions>
-        @if (Post.Text.Length > 3)
+        @if (Post.Text.Length > 3 && !showFullText)
         {
-            <MudButton Variant="Variant.Text" OnClick="() => ViewPost(Post.Id)" Color="Color.Tertiary">Далее . . .</MudButton>
+            <MudButton Variant="Variant.Text" OnClick="() => ToggleView()" Color="Color.Tertiary">Развернуть</MudButton>
         }
     </MudCardActions>
 </MudCard>
@@ -51,6 +63,7 @@
     [Parameter]
     public Post Post { get; set; } 
     MudMessageBox mbox { get; set; }
+    bool showFullText;
     private void ViewPost(string postId)
     {
         NavManager.NavigateTo("/view/" + postId);
@@ -68,5 +81,11 @@
         {
             await PostService.DeletePost(post);
         } 
-    } 
+    }
+
+    private void ToggleView()
+    {
+        showFullText = !showFullText;
+    }
+
 }

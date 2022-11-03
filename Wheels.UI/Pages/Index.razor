@@ -6,17 +6,7 @@
 @inject PostService PostService
 @inject NavigationManager NavManager
 <style>
-    .stroked-text { 
-    background-color: rgba(0,0,0,.4);
-      text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
-      color: #F8F8FF;
-      font-weight: bold; 
-      font-size: large; 
-      text-align: center; 
-      position:absolute; 
-      bottom: 0;
-      cursor: pointer;
-    }
+    
 </style>
 
 <div class="row"> 
@@ -36,11 +26,11 @@
         }
 
     </div>
-    <div class="col-md-4">
-        <div class="row" style="position: fixed;max-height: 300px; justify-content: center;margin: 100px auto">
+    <div class="col-md-4" style="margin: 100px auto; justify-content: center; width: auto">
+            <MudText Typo="Typo.h6">Лучшие посты</MudText>
             <MudCarousel Class="mud-width-full" 
                          ItemsSource="@_topRatedPosts" 
-                         Style="height:200px; max-width: 450px; min-width: 300px"
+                         Style="height:200px; max-width: 450px; min-width: 300px;position: sticky;  "
                          ShowArrows="true" 
                          ShowBullets="false" 
                          EnableSwipeGesture="true" 
@@ -54,7 +44,7 @@
             		</div>
             	</ItemTemplate>
             </MudCarousel>
-        </div>
+        
     </div>
    @if (_postsCount > 10)
    {

@@ -92,3 +92,15 @@ a, .btn-link {
     min-height: 10vh;
     background-color: #F8F8FF;
 }
+.stroked-text { 
+    width: 300px;
+    background-color: rgba(0,0,0,.4);
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    color: #F8F8FF;
+    font-weight: bold;
+    font-size: large;
+    text-align: center;
+    position:absolute;
+    bottom: 0;
+    cursor: pointer;
+}
