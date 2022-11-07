@@ -11,9 +11,10 @@
 
 <div class="row"> 
     <div class="col-md-8" style="margin: 0 auto">
-        <MudPaper Elevation="0" Style="padding: 15px">
+        <MudPaper Elevation="0" Class="header-block">
             <MudButtonGroup Style="justify-content: center;display: flex;" Color="Color.Primary" Variant="Variant.Text">
                 <MudButton>Свежие</MudButton>
+                <MudButton>Лучшие</MudButton>
                 <MudButton>Старые </MudButton>
             </MudButtonGroup>
         </MudPaper>
@@ -27,7 +28,7 @@
 
     </div>
     <div class="col-md-4" style="margin: 100px auto; justify-content: center; width: auto">
-            <MudText Typo="Typo.h6">Лучшие посты</MudText>
+        <div style="position: sticky; top:15px; "> 
             <MudCarousel Class="mud-width-full" 
                          ItemsSource="@_topRatedPosts" 
                          Style="height:200px; max-width: 450px; min-width: 300px;position: sticky;  "
@@ -35,15 +36,17 @@
                          ShowBullets="false" 
                          EnableSwipeGesture="true" 
                          AutoCycle="true">
-            	<ItemTemplate>
+                <ItemTemplate>
                     <div class="d-flex flex-column flex-column justify-center" 
                          style="background-image: url(@context.ImageFile[0]); background-size: contain; background-repeat: no-repeat;height:100%"> 
                         <span class="stroked-text" @onclick="() => ViewPost(context.Id)">
                             @context.Title
                         </span>
-            		</div>
-            	</ItemTemplate>
+                    </div>
+                </ItemTemplate>
             </MudCarousel>
+        </div>
+        
         
     </div>
    @if (_postsCount > 10)

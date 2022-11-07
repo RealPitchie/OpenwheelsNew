@@ -1,0 +1,45 @@
+@page "/topRated"
+
+@using Wheels.Application.Services
+@using Wheels.Domain.Models
+
+@inject PostService PostService
+@inject NavigationManager NavManager
+
+<div class="row"> 
+    <div class="col-md-8" style="margin: 0 auto">
+        <MudPaper Elevation="0" Style="padding: 15px">
+            <MudButtonGroup Style="justify-content: center;display: flex;" Color="Color.Primary" Variant="Variant.Text">
+                <MudButton>Свежие</MudButton>
+                <MudButton>Старые </MudButton>
+            </MudButtonGroup>
+        </MudPaper>
+        @if (_topRatedPosts.Count > 0)
+        {
+            foreach (var post in _topRatedPosts)
+            {
+                <PostPreview Post="post"/>
+            }
+        }
+
+    </div>
+     
+</div>
+
+@code {
+
+    [Parameter]
+    public string Style { get; set; } = "";
+
+    List<Post> _topRatedPosts = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _topRatedPosts = await PostService.GetPostsByRatingAsync();
+    }
+    private void ViewPost(string postId)
+    {
+        NavManager.NavigateTo("/view/" + postId);
+    }
+
+}

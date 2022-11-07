@@ -2,9 +2,11 @@
 
 body{
     background-color: #F8F8FF;
+    
 }
 html, body, p, h1, h2, h3, h4, h5, span {
     font-family: Ubuntu, sans-serif !important;
+    font-size: 1.2em;
 }
 
 h1:focus {
@@ -71,7 +73,7 @@ a, .btn-link {
     
 .hoverable-card{
     padding: 30px;
-    margin: 15px;
+    margin-top: 15px;
 }
 .hoverable-card:hover{
     box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
@@ -103,4 +105,11 @@ a, .btn-link {
     position:absolute;
     bottom: 0;
     cursor: pointer;
+}
+.header-block{
+    padding: 15px;
+    position: sticky;
+    top: 0;
+    box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
+    z-index: 100;
 }

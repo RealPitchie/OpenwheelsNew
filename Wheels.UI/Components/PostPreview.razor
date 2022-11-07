@@ -54,7 +54,7 @@
     <MudCardActions>
         @if (Post.Text.Length > 3 && !showFullText)
         {
-            <MudButton Variant="Variant.Text" OnClick="() => ToggleView()" Color="Color.Tertiary">Развернуть</MudButton>
+            <MudButton Variant="Variant.Text" OnClick="() => ToggleView()" Style="font-size: small" Color="Color.Tertiary">Развернуть</MudButton>
         }
     </MudCardActions>
 </MudCard>
