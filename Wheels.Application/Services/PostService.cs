@@ -88,4 +88,11 @@ public class PostService : IPostService
     {
         return _context.Posts.Count();
     }
+
+    public Dictionary<string, string> GetPostsTitles()
+    {
+        return _context.Posts.Select(x =>
+            new KeyValuePair<string, string>(x.Id, x.Title))
+            .ToDictionary(x => x.Key, x => x.Value);
+    }
 }

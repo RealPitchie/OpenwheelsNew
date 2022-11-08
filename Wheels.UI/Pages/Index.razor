@@ -2,6 +2,7 @@
 @using Wheels.Domain.Models
 @using Wheels.Application.Services 
 @using Wheels.UI.Components
+@using System.Diagnostics
 
 @inject PostService PostService
 @inject NavigationManager NavManager
@@ -11,13 +12,26 @@
 
 <div class="row"> 
     <div class="col-md-8" style="margin: 0 auto">
-        @* <MudPaper Elevation="0" Class="header-block"> *@
-        @*     <MudButtonGroup Style="justify-content: center;display: flex;" Color="Color.Primary" Variant="Variant.Text"> *@
-        @*         <MudButton>Свежие</MudButton> *@
-        @*         <MudButton>Лучшие</MudButton> *@
-        @*         <MudButton>Старые </MudButton> *@
-        @*     </MudButtonGroup> *@
-        @* </MudPaper> *@
+        <MudPaper Elevation="0" Class="header-block"> 
+            <div class="row" style="align-items: flex-end">
+                <div class="col-md-10">
+                    <MudAutocomplete T="string"
+                                     Label="Поиск" FullWidth="false"
+                                     Dense="true" SearchFunc="@Search1"
+                                     @bind-Value="_searchString"
+                                     ShowProgressIndicator="true">
+                        <ProgressIndicatorTemplate>
+                            <MudProgressLinear Size="Size.Small" Indeterminate="true" Color="Color.Default"/>
+                        </ProgressIndicatorTemplate>
+                    </MudAutocomplete>
+                </div>
+                <div class="col-md-2">
+                    <MudButton OnClick="SearchPost">
+                        К посту
+                    </MudButton>
+                </div>
+            </div>
+        </MudPaper> 
         @if (_posts.Count > 0)
         {
             foreach (var post in _posts)
@@ -66,12 +80,19 @@
 @code{
     List<Post> _posts = new();
     List<Post> _topRatedPosts = new();
-    int _postsCount; 
+    Dictionary<string, string> _postsToSearch = new();
+    int _postsCount;
+    string _searchString = "";
     protected override async Task OnInitializedAsync()
     {
+        Stopwatch sw = new();
+        sw.Start();
+        _postsToSearch = PostService.GetPostsTitles();
         _postsCount = PostService.GetPostsCount();
         _posts = await PostService.GetPostsAsync(0);
         _topRatedPosts = await PostService.GetPostsByRatingAsync();
+        Console.WriteLine("Прошло " + sw.ElapsedMilliseconds + " миллисекунд");
+        sw.Stop();
     }
 
     async Task GetPosts(int pageNo)
@@ -83,6 +104,18 @@
     {
         NavManager.NavigateTo("/view/" + postId);
     }
-    
+    private async Task<IEnumerable<string>> Search1(string value)
+    { 
+        if (string.IsNullOrEmpty(value))
+            return _postsToSearch.Values;
+        return _postsToSearch.Values.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
 
+    void SearchPost()
+    {
+        var postId = _postsToSearch
+            .FirstOrDefault(x => 
+                x.Value.ToLower().Contains(_searchString.ToLower())).Key;
+        NavManager.NavigateTo("/view/" + postId);
+    }
 }
