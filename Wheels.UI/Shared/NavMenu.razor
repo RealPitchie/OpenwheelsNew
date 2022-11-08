@@ -1,5 +1,10 @@
 ﻿@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity
+@using Wheels.UI.Data 
+
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject NavigationManager NavManager
+
 <link href="css/sidebar.css" rel="stylesheet"/> 
  
 <div class="area">
@@ -25,15 +30,15 @@
             </a>
             
         </li>
-         <li class="has-subnav">
-             <a href="/addSurvey">
-                 <i class="fa fa-file"></i>
-                 <span class="nav-text">
-                     Новый опрос
-                 </span>
-             </a>
-             
-         </li>
+         @* <li class="has-subnav"> *@
+         @*     <a href="/addSurvey"> *@
+         @*         <i class="fa fa-file"></i> *@
+         @*         <span class="nav-text"> *@
+         @*             Новый опрос *@
+         @*         </span> *@
+         @*     </a> *@
+         @*      *@
+         @* </li> *@
     </ul>
 
     <ul class="logout"> 
@@ -48,12 +53,12 @@
                         </a>
                     </li>
                     <li>
-                        <a href="/logout">
+                        <MudLink style="color: #F8F8FF !important; cursor: pointer; text-decoration: none" @onclick="() => SignOut()">
                             <i class="fa fa-sign-out"></i>
                             <span class="nav-text">
                                 Выход
                             </span>
-                        </a>
+                        </MudLink>
                     </li>
                 </Authorized>
                 <NotAuthorized>
@@ -78,8 +83,24 @@
         
     </ul>
 </nav>
- 
+ <MudMessageBox @ref="mbox"  CancelText="Cancel">
+     <TitleContent>
+         <MudText Typo="Typo.h6" Style="color: red">Внимание</MudText>
+     </TitleContent>
+     <MessageContent>
+         <p style="font-size: smaller">Вы действительно хотите выйти?</p>
+     </MessageContent>
+     <YesButton>
+         <MudButton Style="font-size: x-small; color: red" Size="Size.Small" Variant="Variant.Text">
+             выйти
+         </MudButton>
+     </YesButton>
+     <CancelButton>
+         <MudButton Style="font-size: x-small"  Size="Size.Small" Variant="Variant.Text" >Отмена</MudButton>
+     </CancelButton>
+ </MudMessageBox>
 @code {
+    MudMessageBox mbox { get; set; }
     private bool _collapseNavMenu = true; 
     private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
     string? _userName = "";
@@ -96,6 +117,14 @@
         }
     }
 
+    async Task SignOut()
+    {
+        var result = await mbox.Show();
+        if (result == true)
+        {
+            NavManager.NavigateTo("/logout", true);
+        }
+    }
     private void ToggleNavMenu()
     {
         _collapseNavMenu = !_collapseNavMenu;

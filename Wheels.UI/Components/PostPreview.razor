@@ -7,7 +7,7 @@
  
 <MudCard Class="hoverable-card" Elevation="0" Style="border-radius: 10px">
     
-    <MudCardMedia Image="@Post.ImageFile[0]" Style="height: 400px"/>
+    <MudCardMedia @onclick="() => ViewPost(Post.Id)" Image="@Post.ImageFile[0]" Style="height: 400px; cursor: pointer"/>
     <a href="/" @onclick="() => ViewPost(Post.Id)"><h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @Post.Title </h3></a>
     <h4 style="text-align: right; color: darkgray; font-size: x-small">@Post.Posted.ToString("D")</h4>
     @if (showFullText)
@@ -28,35 +28,37 @@
             </MudText>
         }
     }
-    <div class="row" style="justify-content: flex-end; margin-bottom: 15px">
-        <div class="col-md-4" style="width: fit-content">
+    <div class="row" style=" margin-bottom: 15px"> 
+        <div class="col">
+            @if (Post.Text.Length > 3 && !showFullText)
+            {
+                <MudButton Variant="Variant.Text" OnClick="() => ToggleView()" Style="font-size: small" Color="Color.Tertiary">Развернуть</MudButton>
+            } 
+        </div>
+        <div class="col" style="text-align: end">
             <MudTooltip Text="Редактировать">
                 <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="() => EditPost(Post)" Size="Size.Small" aria-label="delete"></MudIconButton>
             </MudTooltip>
             <MudTooltip Text="Удалить">
                 <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeletePost(Post)" Size="Size.Small" aria-label="delete"></MudIconButton>
             </MudTooltip>
-            <MudMessageBox @ref="mbox" Title="Внимание" CancelText="Cancel">
-                <MessageContent>
-                    Вы действительно хотите удалить этот пост?
-                </MessageContent>
-                <YesButton>
-                    <MudButton Size="Size.Small" Variant="Variant.Text" Color="Color.Error" >Удалить</MudButton>
-                </YesButton>
-                <CancelButton>
-                    <MudButton Size="Size.Small" Variant="Variant.Text" >Отмена</MudButton>
-                </CancelButton>
-            </MudMessageBox>
-            
-
         </div>
+        <MudMessageBox @ref="mbox" Title="Внимание" CancelText="Cancel">
+            <MessageContent>
+                Вы действительно хотите удалить этот пост?
+            </MessageContent>
+            <YesButton>
+                <MudButton Size="Size.Small" Variant="Variant.Text" Color="Color.Error">Удалить</MudButton>
+            </YesButton>
+            <CancelButton>
+                <MudButton Size="Size.Small" Variant="Variant.Text">Отмена</MudButton>
+            </CancelButton>
+        </MudMessageBox>
+
+
+        
     </div>
-    <MudCardActions>
-        @if (Post.Text.Length > 3 && !showFullText)
-        {
-            <MudButton Variant="Variant.Text" OnClick="() => ToggleView()" Style="font-size: small" Color="Color.Tertiary">Развернуть</MudButton>
-        }
-    </MudCardActions>
+    
 </MudCard>
 
 @code {
@@ -64,6 +66,7 @@
     public Post Post { get; set; } 
     MudMessageBox mbox { get; set; }
     bool showFullText;
+    
     private void ViewPost(string postId)
     {
         NavManager.NavigateTo("/view/" + postId);

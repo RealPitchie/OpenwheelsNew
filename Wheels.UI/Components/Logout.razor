@@ -1,0 +1,36 @@
+@namespace Wheels.UI.Components
+ 
+@using System.Security.Claims 
+@inject AuthenticationStateProvider AuthenticationStateProvider  
+
+
+
+<header>
+    <div class="row" style="width: 80%; margin: 100px 100px 0  auto">
+        <div class="col-md-4 offset-4">
+           
+           @if (User.Identity.IsAuthenticated)
+           {
+               <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@("/")" method="post">
+                   <button type="submit" class="nav-link btn btn-danger text-white">Подтвердите выход</button>
+               </form>
+           }
+           else
+           {
+               <p>Вы успешно вышли из приложения</p>
+           }
+           
+        </div>
+    </div>
+    
+</header>
+
+@code {
+    private ClaimsPrincipal? User { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        User = authState.User; 
+    }
+ 
+}

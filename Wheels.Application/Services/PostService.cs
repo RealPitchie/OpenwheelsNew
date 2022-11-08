@@ -40,7 +40,9 @@ public class PostService : IPostService
 
     public async Task<Comment> EditCommentAsync(Comment comment)
     {
-        throw new NotImplementedException();
+        _context.Update(comment);
+        await _context.SaveChangesAsync();
+        return comment;
     }
 
     public async Task<List<Post>> GetPostsAsync(int pageNo)
