@@ -95,4 +95,16 @@ public class PostService : IPostService
             new KeyValuePair<string, string>(x.Id, x.Title))
             .ToDictionary(x => x.Key, x => x.Value);
     }
+
+    public async Task<int> DbCleanup()
+    {
+        var duplicates = _context.Posts.AsEnumerable().GroupBy(a => new { a.Title})
+            .Where(a => a.Count() > 1)
+            .SelectMany(a => a.ToList());
+
+        _context.RemoveRange(duplicates);
+
+        await _context.SaveChangesAsync();
+        return duplicates.Count();
+    }
 }

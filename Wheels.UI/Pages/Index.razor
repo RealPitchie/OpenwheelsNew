@@ -8,15 +8,14 @@
 @inject NavigationManager NavManager
 <style>
     
-</style>
-
+</style> 
 <div class="row"> 
     <div class="col-md-8" style="margin: 0 auto">
         <MudPaper Elevation="0" Class="header-block"> 
         <p>@_postsToSearch.Count</p>
             <div class="row" style="align-items: flex-end">
                 <div class="col-md-10">
-                    <MudAutocomplete T="string"
+                    <MudAutocomplete MaxItems="50" T="string"
                                      Label="Поиск" FullWidth="false"
                                      Dense="true" SearchFunc="@Search1"
                                      @bind-Value="_searchString"
@@ -83,6 +82,7 @@
     List<Post> _topRatedPosts = new();
     Dictionary<string, string> _postsToSearch = new();
     int _postsCount;
+    int _postsDeleted;
     string _searchString = "";
     protected override async Task OnInitializedAsync()
     {
@@ -118,5 +118,10 @@
             .FirstOrDefault(x => 
                 x.Value.ToLower().Contains(_searchString.ToLower())).Key;
         NavManager.NavigateTo("/view/" + postId);
+    }
+
+    async Task Cleanup()
+    {
+        _postsDeleted = await PostService.DbCleanup();
     }
 }
