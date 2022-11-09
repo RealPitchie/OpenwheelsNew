@@ -1,15 +1,27 @@
 @using Wheels.Domain.Models
 @using Wheels.Application.Services
+@using System.Security.Claims
 @namespace Wheels.UI.Components
 
 @inject PostService PostService
 @inject NavigationManager NavManager
- 
-<MudCard Class="hoverable-card" Elevation="0" Style="border-radius: 10px">
-    
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<MudCard Class="hoverable-card" Elevation="0" Style="border-radius: 10px"> 
     <MudCardMedia @onclick="() => ViewPost(Post.Id)" Image="@Post.ImageFile[0]" Style="height: 400px; cursor: pointer"/>
     <a href="/" @onclick="() => ViewPost(Post.Id)"><h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @Post.Title </h3></a>
     <h4 style="text-align: right; color: darkgray; font-size: x-small">@Post.Posted.ToString("D")</h4>
+    @if (_userId == Post.Author)
+    {
+        <div class="col" style="text-align: end">
+            <MudTooltip Text="Редактировать">
+                <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="() => EditPost(Post)" Size="Size.Small" aria-label="delete"></MudIconButton>
+            </MudTooltip>
+            <MudTooltip Text="Удалить">
+                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeletePost(Post)" Size="Size.Small" aria-label="delete"></MudIconButton>
+            </MudTooltip>
+        </div>
+    }
     @if (showFullText)
     {
         @foreach (var line in Post.Text)
@@ -35,14 +47,7 @@
                 <MudButton Variant="Variant.Text" OnClick="() => ToggleView()" Style="font-size: small" Color="Color.Tertiary">Развернуть</MudButton>
             } 
         </div>
-        <div class="col" style="text-align: end">
-            <MudTooltip Text="Редактировать">
-                <MudIconButton Icon="@Icons.Material.Filled.Edit" OnClick="() => EditPost(Post)" Size="Size.Small" aria-label="delete"></MudIconButton>
-            </MudTooltip>
-            <MudTooltip Text="Удалить">
-                <MudIconButton Icon="@Icons.Material.Filled.Delete" OnClick="() => DeletePost(Post)" Size="Size.Small" aria-label="delete"></MudIconButton>
-            </MudTooltip>
-        </div>
+        
         <MudMessageBox @ref="mbox" Title="Внимание" CancelText="Cancel">
             <MessageContent>
                 Вы действительно хотите удалить этот пост?
@@ -54,11 +59,11 @@
                 <MudButton Size="Size.Small" Variant="Variant.Text">Отмена</MudButton>
             </CancelButton>
         </MudMessageBox>
-
-
+        
+        
         
     </div>
-    
+    <PostRating Post="Post" UpVote="VoteUp" DownVote="VoteDown"></PostRating>
 </MudCard>
 
 @code {
@@ -66,7 +71,17 @@
     public Post Post { get; set; } 
     MudMessageBox mbox { get; set; }
     bool showFullText;
-    
+    string? _userId = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity is {IsAuthenticated: true })
+        {
+            _userId = user.FindFirst(c => c.Type == "Nickname")?.Value;
+        }
+    }
+
     private void ViewPost(string postId)
     {
         NavManager.NavigateTo("/view/" + postId);
@@ -91,4 +106,12 @@
         showFullText = !showFullText;
     }
 
+    async Task<int> VoteUp(Post post)
+    {
+        return await PostService.UpVotePostAsync(post);
+    }
+    async Task<int> VoteDown(Post post)
+    {
+        return await PostService.DownVotePostAsync(post);
+    }
 }

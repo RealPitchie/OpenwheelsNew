@@ -107,4 +107,21 @@ public class PostService : IPostService
         await _context.SaveChangesAsync();
         return duplicates.Count();
     }
+
+    public async Task<int> UpVotePostAsync(Post post)
+    {
+        post.Rating++;
+        _context.Posts.Update(post);
+        await _context.SaveChangesAsync();
+        
+        return post.Rating;
+    }
+    public async Task<int> DownVotePostAsync(Post post)
+    {
+        post.Rating--;
+        _context.Posts.Update(post);
+        await _context.SaveChangesAsync();
+        
+        return post.Rating;
+    }
 }

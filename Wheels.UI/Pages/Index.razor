@@ -11,10 +11,9 @@
 </style> 
 <div class="row"> 
     <div class="col-md-8" style="margin: 0 auto">
-        <MudPaper Elevation="0" Class="header-block"> 
-        <p>@_postsToSearch.Count</p>
+        <MudPaper Elevation="0" Class="header-block">  
             <div class="row" style="align-items: flex-end">
-                <div class="col-md-10">
+                <div class="col-md-9">
                     <MudAutocomplete MaxItems="50" T="string"
                                      Label="Поиск" FullWidth="false"
                                      Dense="true" SearchFunc="@Search1"
@@ -25,7 +24,7 @@
                         </ProgressIndicatorTemplate>
                     </MudAutocomplete>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-3">
                     <MudButton OnClick="SearchPost">
                         К посту
                     </MudButton>

@@ -1,0 +1,38 @@
+@using Wheels.Domain.Models
+ 
+<style>
+    .ratingNumber{
+        display: inline; 
+        font-size: smaller; 
+        font-weight: bold;
+        margin: 0 10px;
+    }
+</style>
+<div style="display: flex; justify-content: flex-end">
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleUp" Color="Color.Success" Size="Size.Small" Style="width: 25px" OnClick="Up" />
+    <MudText Style=@_postRatingColor Class="ratingNumber" Typo="Typo.body1"> @Post.Rating</MudText>
+    <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleDown" Color="Color.Error" Size="Size.Small" Style="width: 25px" OnClick="Down" />
+     
+</div> 
+@code {
+    [Parameter]
+    public Post Post { get; set; }
+    [Parameter]
+    public EventCallback<Post> UpVote { get; set; }
+    [Parameter]
+    public EventCallback<Post> DownVote { get; set; }
+    string _postRatingColor = "";
+    protected override void OnInitialized()
+    {
+        _postRatingColor = Post.Rating >= 0 ? "color: green" : "color: red";
+    }
+
+    public void Up()
+    {
+        UpVote.InvokeAsync(Post); 
+    }
+    public void Down()
+    {
+        DownVote.InvokeAsync(Post); 
+    }
+}
