@@ -33,6 +33,7 @@
         </MudPaper> 
         @if (_posts.Count > 0)
         {
+            
             foreach (var post in _posts)
             {
                 <PostPreview Post="post"/>
@@ -40,7 +41,7 @@
         }
         else
         {
-            <Grid />
+            <Grid Size="300px" Center="true" Color="lightgray" style="margin-top: 15%"/>
         }
 
     </div>
