@@ -106,9 +106,14 @@ a, .btn-link {
     cursor: pointer;
 }
 .header-block{
-    padding: 15px;
+    opacity: 50%;
+    padding: 5px 15px;
     position: sticky;
     top: 0;
     box-shadow: 0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);
     z-index: 100;
+    transition: opacity 0.3s, visibility 0s linear 0.3s;
+}
+.header-block:hover{
+    opacity: 100%;
 }

@@ -16,8 +16,8 @@
                 <div class="col-md-9">
                     <MudAutocomplete MaxItems="50" T="string"
                                      Label="Поиск" FullWidth="false"
-                                     Dense="true" SearchFunc="@Search1"
-                                     @bind-Value="_searchString"
+                                     Margin="Margin.Dense" SearchFunc="@Search1"
+                                     @bind-Value="_searchString" 
                                      ShowProgressIndicator="true">
                         <ProgressIndicatorTemplate>
                             <MudProgressLinear Size="Size.Small" Indeterminate="true" Color="Color.Default"/>
