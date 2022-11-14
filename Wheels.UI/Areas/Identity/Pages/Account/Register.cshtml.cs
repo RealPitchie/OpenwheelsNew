@@ -183,5 +183,6 @@ namespace Wheels.UI.Areas.Identity.Pages.Account
             }
             return (IUserEmailStore<AppUser>)_userStore;
         }
+        
     }
 }

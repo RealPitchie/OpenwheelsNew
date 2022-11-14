@@ -29,7 +29,9 @@ services.AddDefaultIdentity<AppUser>(options =>
  
 services.AddDatabaseDeveloperPageExceptionFilter(); 
 services.AddRazorPages();
-services.AddServerSideBlazor();
+services.AddServerSideBlazor().AddHubOptions(options => 
+        options.MaximumReceiveMessageSize = 20 * 1024 * 1024
+    );
 services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AppUser>>();
 services.AddSingleton<WeatherForecastService>();
 services.AddMudServices();

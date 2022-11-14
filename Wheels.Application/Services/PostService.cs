@@ -123,5 +123,5 @@ public class PostService : IPostService
         await _context.SaveChangesAsync();
         
         return post.Rating;
-    }
+    } 
 }

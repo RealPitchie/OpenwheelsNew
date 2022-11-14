@@ -1,0 +1,67 @@
+@page "/addNewPost" 
+
+@using Wheels.Application.Services
+@using Wheels.Domain.Models
+
+@inject NavigationManager NavManager
+@inject PostService PostService
+@inject IWebHostEnvironment Env
+@inject ISnackbar Snackbar
+
+<div class="row" style="width: 80%; margin: 50px auto; justify-content: center; ">
+    <div class="col-md-6" style="background-color: white; border-radius: 10px">
+        <MudText Typo="Typo.h5" Style="text-align: center">Новый пост</MudText>
+        <MudTextField T="string" @bind-Value="_post.Title" HelperText="Заголовок"/>
+        <MudTextField T="string" Lines="5" HelperText="Текст"></MudTextField> 
+            <MudText Typo="Typo.body1">Фото</MudText>
+            @if (!string.IsNullOrEmpty(_image))
+            { 
+                    <MudImage Style="max-width: 100%; max-height: 100%" Src="@_image"></MudImage>
+            }
+            <InputFile id="fileInput" OnChange="OnInputFileChange" hidden type="file" accept=".jpg, .jpeg, .png"/>
+        
+        <MudButton HtmlTag="label"
+                   Variant="Variant.Text"
+                   Color="Color.Tertiary"
+                   StartIcon="@Icons.Filled.CloudUpload"
+                   for="fileInput">
+            Прикрепить фото
+        </MudButton>
+        <MudDivider Light="true" Style="margin: 15px auto"></MudDivider>
+         <MudButton Variant="Variant.Text" Color="Color.Primary">Опубликовать</MudButton>
+    </div>
+</div>
+
+@code {
+    readonly Post _post = new();
+    IReadOnlyList<IBrowserFile>? _selectedFiles;
+    string _image = "";
+    async Task Submit()
+    {
+        await PostService.AddPostAsync(_post);
+        NavManager.NavigateTo("/", true);
+    }
+    async Task OnInputFileChange(InputFileChangeEventArgs e)
+    {
+        _selectedFiles = e.GetMultipleFiles();
+        var file = _selectedFiles?[0];
+        if (file is {Size: > 2048000 })
+        {
+            Snackbar.Add($"Максимальный размер файла 2Mb", Severity.Error);
+            return;
+        }
+        var stream = file?.OpenReadStream(2048000);
+        var path = $"{Env.WebRootPath}\\images\\{file?.Name}";
+        var fs = File.Create(path);
+        await stream?.CopyToAsync(fs)!;
+        stream.Close();
+        fs.Close();
+        _image = "/images/" + _selectedFiles?[0].Name;
+        StateHasChanged();
+    }
+
+    async void OnSubmit()
+    {
+        _post.ImageFile[0] = _image;
+    }
+}

@@ -17,7 +17,7 @@ public class Post
     public bool WasDeleted { get; set; }
     public Post()
     {
-        Id = Guid.NewGuid().ToString();
+        Id = Guid.NewGuid().ToString(); 
         Comments = new List<Comment>();
     }
 
