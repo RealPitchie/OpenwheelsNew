@@ -14,11 +14,12 @@ public class Post
     public string Author { get; set; }
     public string AuthorAvatar { get; set; }
     public List<Comment> Comments { get; set; }
+    public List<Vote> Votes { get; set; } = new List<Vote>();
     public bool WasDeleted { get; set; }
     public Post()
     {
         Id = Guid.NewGuid().ToString(); 
-        Comments = new List<Comment>();
+        Comments = new List<Comment>(); 
     }
 
 }

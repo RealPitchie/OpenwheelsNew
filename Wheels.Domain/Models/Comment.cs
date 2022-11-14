@@ -8,5 +8,5 @@ public class Comment
     public DateTime Posted { get; set; } 
     public string PostId { get; set; }
     public string ImageFile { get; set; } 
-         
+    public List<Vote> Votes { get; set; }
 }

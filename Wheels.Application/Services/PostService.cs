@@ -48,6 +48,7 @@ public class PostService : IPostService
     public async Task<List<Post>> GetPostsAsync(int pageNo)
     {
         return await _context.Posts
+            .Include(p => p.Votes)
             .Where(p => !p.WasDeleted)
             .OrderByDescending(p => p.Posted)
             .Skip(pageNo * 10)
@@ -58,6 +59,7 @@ public class PostService : IPostService
     public async Task<List<Post>> GetPostsByWeeks(int weeksToShow, int pageNo)
     {
         return await _context.Posts
+            .Include(p => p.Votes)
             .Where(p => p.Posted >= DateTime.Now.AddDays(weeksToShow * 7))
             .OrderByDescending(p => p.Posted)
             .Skip(pageNo *10)
@@ -75,7 +77,10 @@ public class PostService : IPostService
 
     public async Task<Post> GetPostAsync(string postId)
     {
-        return await _context.Posts.FirstOrDefaultAsync(p => p.Id == postId);
+        return await _context.Posts
+            .Include(p => p.Votes)
+            .Include(p => p.Comments)
+            .FirstOrDefaultAsync(p => p.Id == postId);
     }
 
     public async Task<List<Comment>> GetCommentsByPostIdAsync(string targetPostId)
@@ -108,20 +113,5 @@ public class PostService : IPostService
         return duplicates.Count();
     }
 
-    public async Task<int> UpVotePostAsync(Post post)
-    {
-        post.Rating++;
-        _context.Posts.Update(post);
-        await _context.SaveChangesAsync();
-        
-        return post.Rating;
-    }
-    public async Task<int> DownVotePostAsync(Post post)
-    {
-        post.Rating--;
-        _context.Posts.Update(post);
-        await _context.SaveChangesAsync();
-        
-        return post.Rating;
-    } 
+    
 }

@@ -17,7 +17,7 @@ namespace Wheels.Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.1")
+                .HasAnnotation("ProductVersion", "6.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -81,9 +81,39 @@ namespace Wheels.Persistence.Migrations
                     b.Property<string>("VideoLink")
                         .HasColumnType("text");
 
+                    b.Property<bool>("WasDeleted")
+                        .HasColumnType("boolean");
+
                     b.HasKey("Id");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("Wheels.Domain.Models.Vote", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("text");
+
+                    b.Property<string>("CommentId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("PostId")
+                        .HasColumnType("text");
+
+                    b.Property<string>("User")
+                        .HasColumnType("text");
+
+                    b.Property<string>("VoteType")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommentId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("Vote");
                 });
 
             modelBuilder.Entity("Wheels.Domain.Models.Comment", b =>
@@ -93,9 +123,27 @@ namespace Wheels.Persistence.Migrations
                         .HasForeignKey("PostId");
                 });
 
+            modelBuilder.Entity("Wheels.Domain.Models.Vote", b =>
+                {
+                    b.HasOne("Wheels.Domain.Models.Comment", null)
+                        .WithMany("Votes")
+                        .HasForeignKey("CommentId");
+
+                    b.HasOne("Wheels.Domain.Models.Post", null)
+                        .WithMany("Votes")
+                        .HasForeignKey("PostId");
+                });
+
+            modelBuilder.Entity("Wheels.Domain.Models.Comment", b =>
+                {
+                    b.Navigation("Votes");
+                });
+
             modelBuilder.Entity("Wheels.Domain.Models.Post", b =>
                 {
                     b.Navigation("Comments");
+
+                    b.Navigation("Votes");
                 });
 #pragma warning restore 612, 618
         }

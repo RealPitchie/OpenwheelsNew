@@ -38,6 +38,7 @@ services.AddMudServices();
 services.AddDbContext<PostsContext>(options => 
     options.UseNpgsql(connectionString));
 services.AddScoped<PostService>();
+services.AddScoped<VoteService>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 var app = builder.Build();
 

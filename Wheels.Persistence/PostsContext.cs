@@ -11,6 +11,6 @@ public class PostsContext : DbContext
         Database.EnsureCreated();
     }
     public DbSet<Comment> Comments { get; set; } 
-    public DbSet<Post> Posts { get; set; }
-        
+    public DbSet<Post> Posts { get; set; } 
+
 }

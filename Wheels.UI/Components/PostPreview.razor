@@ -4,8 +4,10 @@
 @namespace Wheels.UI.Components
 
 @inject PostService PostService
+@inject VoteService VoteService
 @inject NavigationManager NavManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ISnackbar Snackbar
 
 <MudCard Class="hoverable-card" Elevation="0" Style="border-radius: 10px"> 
     <MudCardMedia @onclick="() => ViewPost(Post.Id)" Image="@Post.ImageFile[0]" Style="height: 400px; cursor: pointer"/>
@@ -22,7 +24,7 @@
             </MudTooltip>
         </div>
     }
-    @if (showFullText)
+    @if (_showFullText)
     {
         @foreach (var line in Post.Text)
         {
@@ -42,13 +44,13 @@
     }
     <div class="row" style=" margin-bottom: 15px"> 
         <div class="col">
-            @if (Post.Text.Length > 3 && !showFullText)
+            @if (Post.Text.Length > 3 && !_showFullText)
             {
                 <MudButton Variant="Variant.Text" OnClick="() => ToggleView()" Style="font-size: small" Color="Color.Tertiary">Развернуть</MudButton>
             } 
         </div>
         
-        <MudMessageBox @ref="mbox" Title="Внимание" CancelText="Cancel">
+        <MudMessageBox @ref="Mbox" Title="Внимание" CancelText="Cancel">
             <MessageContent>
                 Вы действительно хотите удалить этот пост?
             </MessageContent>
@@ -63,14 +65,14 @@
         
         
     </div>
-    <PostRating Post="Post" UpVote="VoteUp" DownVote="VoteDown"></PostRating>
+    <PostRating Post="Post" UpVote="() => VoteUp(Post, _userId)" DownVote="() => VoteDown(Post, _userId)"></PostRating>
 </MudCard>
 
 @code {
     [Parameter]
     public Post Post { get; set; } 
-    MudMessageBox mbox { get; set; }
-    bool showFullText;
+    MudMessageBox Mbox { get; set; }
+    bool _showFullText;
     string? _userId = string.Empty;
     protected override async Task OnInitializedAsync()
     {
@@ -94,7 +96,7 @@
 
     private async Task  DeletePost(Post post)
     {
-        var result = await mbox.Show();
+        var result = await Mbox.Show();
         if (result == true)
         {
             await PostService.DeletePost(post);
@@ -103,15 +105,27 @@
 
     private void ToggleView()
     {
-        showFullText = !showFullText;
+        _showFullText = !_showFullText;
     }
 
-    async Task<int> VoteUp(Post post)
+    async Task VoteUp(Post post, string? userId)
     {
-        return await PostService.UpVotePostAsync(post);
+        if (VoteService.WasUpvotedByUser(post, userId))
+        {
+            Snackbar.Add($"Пост уже оценен", Severity.Error);
+            return;
+        }
+        await VoteService.Vote(post, userId, "up");
     }
-    async Task<int> VoteDown(Post post)
+
+    async Task VoteDown(Post post, string? userId)
     {
-        return await PostService.DownVotePostAsync(post);
+        if (VoteService.WasDownvotedByUser(post, userId))
+        {
+            Snackbar.Add($"Пост уже оценен", Severity.Error);
+            return;
+        }
+        await VoteService.Vote(post, userId, "down");
     }
+
 }
