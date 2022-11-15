@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 using Wheels.Application.Services;
@@ -26,7 +27,8 @@ services.AddDefaultIdentity<AppUser>(options =>
         }
     )
     .AddEntityFrameworkStores<ApplicationDbContext>();
- 
+services.AddControllers().PartManager.ApplicationParts.Add(new AssemblyPart(typeof(Wheels.API.Controllers.PostsController).Assembly));
+
 services.AddDatabaseDeveloperPageExceptionFilter(); 
 services.AddRazorPages();
 services.AddServerSideBlazor().AddHubOptions(options => 
@@ -63,9 +65,13 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
-app.MapBlazorHub();
-app.MapFallbackToPage("/_Host");
+app.UseCors();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+    endpoints.MapBlazorHub();
+    endpoints.MapRazorPages();
+    endpoints.MapFallbackToPage("/_Host");
+});
 
 app.Run();
