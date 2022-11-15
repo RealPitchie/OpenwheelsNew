@@ -82,6 +82,8 @@
         {
             _userId = user.FindFirst(c => c.Type == "Nickname")?.Value;
         }
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomEnd;
+        Snackbar.Configuration.SnackbarVariant = Variant.Text;
     }
 
     private void ViewPost(string postId)
@@ -112,7 +114,12 @@
     {
         if (VoteService.WasUpvotedByUser(post, userId))
         {
-            Snackbar.Add($"Пост уже оценен", Severity.Error);
+            Snackbar.Add($"Пост уже оценен", Severity.Error,  config =>
+                {
+                    config.VisibleStateDuration = 1;
+                    config.SnackbarVariant = Variant.Text;
+                }
+            );
             return;
         }
         await VoteService.Vote(post, userId, "up");
