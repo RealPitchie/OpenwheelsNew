@@ -16,7 +16,17 @@ public class VoteService : IVoteservice
     public async Task Vote(Post post, string? userId, string vote)
     {
         var newVote = new Vote() { Id = Guid.NewGuid().ToString(), VoteType = vote, User = userId };
-        post.Rating = vote == "up" ? ++post.Rating : --post.Rating;
+        switch (vote)
+        {
+            case "up":
+                post.Votes.Remove(post.Votes.Find(v => v.User == userId && v.VoteType == "down"));
+                post.Rating++;
+                break;
+            case "down":
+                post.Votes.Remove(post.Votes.Find(v => v.User == userId && v.VoteType == "up"));
+                post.Rating--;
+                break;
+        }
         post.Votes.Add(newVote);
         await _context.AddAsync(newVote);
         _context.Posts.Update(post);
@@ -24,12 +34,12 @@ public class VoteService : IVoteservice
     }
 
     public bool WasUpvotedByUser(Post post, string userId)
-    {
+    { 
         return post.Votes.Any(v => v.User == userId && v.VoteType == "up");
     }
 
     public  bool WasDownvotedByUser(Post post, string userId)
-    {
+    { 
         return post.Votes.Any(v => v.User == userId && v.VoteType == "down");
     } 
 }
