@@ -1,4 +1,7 @@
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Bson;
+using MongoDB.Driver;
 using Wheels.Domain.Models;
 using Wheels.Persistence;
 
@@ -163,5 +166,45 @@ using Newtonsoft.Json;
             }
 
             return new Post{Id = "emptyPost"};
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetMongoDatabases()
+        {
+            var posts = await _context.Posts.ToListAsync();
+            var client = new MongoClient("mongodb://localhost:27017");
+            var db = client.GetDatabase("Wheels");
+            var data = db.GetCollection<Post>("Posts");
+            if (posts != null) await data.InsertManyAsync(posts);
+            return Ok(data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> TimeComparisonPSQL()
+        {
+            var sw = new Stopwatch();
+            var times = new List<string>();
+            var posts = new List<Post>();
+            sw.Start();
+            posts = await _context.Posts.ToListAsync();
+            times.Add("Postgresql time: " + sw.ElapsedMilliseconds);
+            sw.Stop();
+            return Ok(times);
+        }
+        [HttpGet]
+        public async Task<IActionResult> TimeComparisonMongo()
+        {
+            var sw = new Stopwatch();
+            var times = new List<string>();
+            var posts = new List<Post>();
+            sw.Start();
+            var client = new MongoClient("mongodb://localhost:27017");
+            var db = client.GetDatabase("Wheels");
+            var data = db.GetCollection<Post>("Posts");
+            using var cursor = await data.FindAsync(new BsonDocument());
+            posts = await cursor.ToListAsync();
+            times.Add("Mongo time: " + sw.ElapsedMilliseconds);
+            sw.Stop();
+            return Ok(times);
         }
     } 
