@@ -59,7 +59,7 @@ using Newtonsoft.Json;
         [HttpGet]
         public async Task<IActionResult> GetById(string id)
         {
-            var post = await _posts.FirstAsync(p => p.Id == id);  
+            var post = await _posts.Include(p => p.Comments).FirstAsync(p => p.Id == id);  
             return Ok(post);
         }
         // POST api/posts
