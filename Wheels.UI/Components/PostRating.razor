@@ -8,12 +8,17 @@
         margin: 0 10px;
     }
 </style>
-<div style="display: flex; justify-content: flex-end">
-    <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleUp" Color="Color.Success" Size="Size.Small" Style="width: 25px" OnClick="Up" />
-    <MudText Style=@_postRatingColor Class="ratingNumber" Typo="Typo.body1"> @Post.Rating</MudText>
-    <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleDown" Color="Color.Error" Size="Size.Small" Style="width: 25px" OnClick="Down" />
-     
-</div> 
+<div class="row" style="padding: 0 20px">
+    <div style="display: flex; justify-content: space-between">
+    <MudIconButton Icon="@Icons.Material.Filled.Share" Size="Size.Small">Поделиться</MudIconButton>
+        <span>
+            <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleUp" Color="Color.Success" Size="Size.Small" Style="width: 25px" OnClick="Up"/>
+            <MudText Style=@_postRatingColor Class="ratingNumber" Typo="Typo.body1"> @Post.Rating</MudText>
+            <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleDown" Color="Color.Error" Size="Size.Small" Style="width: 25px" OnClick="Down"/>
+                
+        </span>    
+    </div> 
+</div>
 @code {
     [Parameter]
     public Post Post { get; set; }
