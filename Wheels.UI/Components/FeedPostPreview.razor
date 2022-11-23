@@ -1,0 +1,176 @@
+
+@using Wheels.Domain.Models
+@using Wheels.Application.Services
+@using System.Security.Claims
+@namespace Wheels.UI.Components
+
+@inject PostService PostService
+@inject VoteService VoteService
+@inject NavigationManager NavManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject ISnackbar Snackbar
+ <div class="social-feed-separated">
+    <div class="social-feed-box">
+        <div class="pull-right social-action dropdown">
+            <button data-toggle="dropdown" class="dropdown-toggle btn-white">
+                <i class="fa fa-angle-down"></i>
+            </button>
+            <ul class="dropdown-menu m-t-xs">
+                <li><a href="#">Config</a></li>
+            </ul>
+        </div>
+        <div class="social-avatar">
+            <a href="#">
+                @post.Author
+            </a>
+            <small class="text-muted">@post.Posted.ToString("D") - @post.Posted.ToShortTimeString()</small>
+        </div>
+        <div class="social-body">
+            <a href="/feed" @onclick="() => ViewPost(post.Id)"><h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @post.Title </h3></a>
+            
+            <div style="text-align: center">
+                <img alt="image" src=@("https:" + post.ImageFile[0]) style="max-width: 100%;">
+            </div> 
+            @if (_showFullText)
+            {
+                @foreach (var line in post.Text)
+                {
+                    <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+                        @line
+                    </MudText>
+                }
+            }
+            else
+            {
+                foreach (var line in post.Text.Take(2))
+                {
+                    <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+                        @line
+                    </MudText>
+                }
+            }
+             <div class="row" style=" margin-bottom: 15px"> 
+                            <div class="col">
+                                @if (post.Text.Length > 3 && !_showFullText)
+                                {
+                                    <MudButton Variant="Variant.Text" OnClick="() => ToggleView()" Style="font-size: small" Color="Color.Tertiary">Развернуть</MudButton>
+                                } 
+                            </div>
+                            
+                            <MudMessageBox @ref="Mbox" Title="Внимание" CancelText="Cancel">
+                                <MessageContent>
+                                    Вы действительно хотите удалить этот пост?
+                                </MessageContent>
+                                <YesButton>
+                                    <MudButton Size="Size.Small" Variant="Variant.Text" Color="Color.Error">Удалить</MudButton>
+                                </YesButton>
+                                <CancelButton>
+                                    <MudButton Size="Size.Small" Variant="Variant.Text">Отмена</MudButton>
+                                </CancelButton>
+                            </MudMessageBox>
+                            
+                            
+                            
+                        </div>
+            <div class="btn-group">
+                <button class="btn btn-white btn-xs"><i class="fa fa-thumbs-up"></i> Like this!</button>
+                <button class="btn btn-white btn-xs"><i class="fa fa-comments"></i> Comment</button>
+                <button class="btn btn-white btn-xs"><i class="fa fa-share"></i> Share</button>
+            </div>
+        </div>
+        <div class="social-footer">
+            @foreach (var comment in post.Comments)
+            {
+                <div class="social-comment">
+
+                    <div class="media-body">
+                        <a href="#">
+                            @comment.Author
+                        </a>
+                        @comment.Text
+                        <br> 
+                        <small class="text-muted">@comment.Posted.ToString("D"), @comment.Posted.ToShortTimeString()</small>
+                    </div>
+                </div>
+            }
+            <div class="social-comment">
+                    
+                <div class="media-body">
+                    <textarea class="form-control" placeholder="Write comment..."></textarea>
+                </div>
+            </div>
+        
+        </div>
+       
+            <PostRating Post="post" UpVote="() => VoteUp(post, _userId)" DownVote="() => VoteDown(post, _userId)"></PostRating>
+    </div>
+
+</div>
+
+@code {
+    [Parameter]
+    public Post post { get; set; } 
+    MudMessageBox Mbox { get; set; }
+    bool _showFullText;
+    string? _userId = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity is {IsAuthenticated: true })
+        {
+            _userId = user.FindFirst(c => c.Type == "Nickname")?.Value;
+        }
+        Snackbar.Configuration.PositionClass = Defaults.Classes.Position.BottomEnd;
+        Snackbar.Configuration.SnackbarVariant = Variant.Text;
+    }
+ 
+    private void ViewPost(string postId)
+    {
+        NavManager.NavigateTo("/view/" + postId);
+    }
+
+    private void EditPost(Post post)
+    {
+        NavManager.NavigateTo("/edit/" + post.Id);
+    }
+
+    private async Task  DeletePost(Post post)
+    {
+        var result = await Mbox.Show();
+        if (result == true)
+        {
+            await PostService.DeletePost(post);
+        } 
+    }
+
+    private void ToggleView()
+    {
+        _showFullText = !_showFullText;
+    }
+
+    async Task VoteUp(Post post, string? userId)
+    {
+        if (VoteService.WasUpvotedByUser(post, userId))
+        {
+            Snackbar.Add($"Пост уже оценен", Severity.Error,  config =>
+            {
+                config.VisibleStateDuration = 1;
+                config.SnackbarVariant = Variant.Text;
+            }
+                );
+            return;
+        }
+        await VoteService.Vote(post, userId, "up");
+    }
+
+    async Task VoteDown(Post post, string? userId)
+    {
+        if (VoteService.WasDownvotedByUser(post, userId))
+        {
+            Snackbar.Add($"Пост уже оценен", Severity.Error);
+            return;
+        }
+        await VoteService.Vote(post, userId, "down");
+    }
+}

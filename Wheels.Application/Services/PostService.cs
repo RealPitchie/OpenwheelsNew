@@ -45,14 +45,23 @@ public class PostService : IPostService
         return comment;
     }
 
+    public async Task<List<Post>> GetPostsByCount(int offset)
+    {
+        return await _context.Posts
+            .OrderByDescending(p => p.Posted)
+            .Skip(offset)
+            .Take(5)
+            .ToListAsync();
+    }
+
     public async Task<List<Post>> GetPostsAsync(int pageNo)
     {
         return await _context.Posts
             .Include(p => p.Votes)
             .Where(p => !p.WasDeleted)
             .OrderByDescending(p => p.Posted)
-            .Skip(pageNo * 10)
-            .Take(10)
+            .Skip(pageNo * 5)
+            .Take(5)
             .ToListAsync();
     }
 
@@ -62,8 +71,8 @@ public class PostService : IPostService
             .Include(p => p.Votes)
             .Where(p => p.Posted >= DateTime.Now.AddDays(weeksToShow * 7))
             .OrderByDescending(p => p.Posted)
-            .Skip(pageNo *10)
-            .Take(10)
+            .Skip(pageNo *5)
+            .Take(5)
             .ToListAsync();
     }
 

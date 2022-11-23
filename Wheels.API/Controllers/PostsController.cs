@@ -168,16 +168,16 @@ using Newtonsoft.Json;
             return new Post{Id = "emptyPost"};
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetMongoDatabases()
-        {
-            var posts = await _context.Posts.ToListAsync();
-            var client = new MongoClient("mongodb://localhost:27017");
-            var db = client.GetDatabase("Wheels");
-            var data = db.GetCollection<Post>("Posts");
-            if (posts != null) await data.InsertManyAsync(posts);
-            return Ok(data);
-        }
+        // [HttpGet]
+        // public async Task<IActionResult> GetMongoDatabases()
+        // {
+        //     var posts = await _context.Posts.ToListAsync();
+        //     var client = new MongoClient("mongodb://localhost:27017");
+        //     var db = client.GetDatabase("Wheels");
+        //     var data = db.GetCollection<Post>("Posts");
+        //     if (posts != null) await data.InsertManyAsync(posts);
+        //     return Ok(data);
+        // }
 
         [HttpGet]
         public async Task<IActionResult> TimeComparisonPSQL()

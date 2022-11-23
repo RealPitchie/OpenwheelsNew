@@ -1,0 +1,97 @@
+@page "/feed"
+@using Wheels.Domain.Models
+@using Wheels.Application.Services 
+@using Wheels.UI.Components
+@using System.Diagnostics
+
+@inject PostService PostService
+@inject NavigationManager NavManager
+
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<link href="css/feed.css" rel="stylesheet" />
+@if (_posts.Count > 1)
+{
+    <div class="container"> 
+        <div style="max-width: 780px">
+            <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPosts()">
+                <ul>
+                    @foreach (var post in _posts)
+                    {
+                        <FeedPostPreview Post="@post"/>
+                    }
+
+                    @*The target element that we observe. Once this is reached the callback will be triggered.*@
+                    <li class="list-group-item"  id="observerTarget"></li>
+                </ul>
+            </InfiniteScroll>
+        </div>
+    </div>
+}
+@code {
+    List<Post> _posts = new();
+    List<Post> _topRatedPosts = new();
+    Dictionary<string, string> _postsToSearch = new();
+    int _postsCount;
+    int _postsDeleted;
+    string _searchString = "";
+    protected override async Task OnInitializedAsync()
+    {
+        Stopwatch sw = new();
+        sw.Start();
+        _postsToSearch = PostService.GetPostsTitles();
+        _postsCount = PostService.GetPostsCount();
+        await FetchPosts();
+        // _topRatedPosts = await PostService.GetPostsByRatingAsync();
+        Console.WriteLine("Прошло " + sw.ElapsedMilliseconds + " миллисекунд");
+        sw.Stop(); 
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            
+        }
+    } 
+
+    async Task GetPosts(int pageNo)
+    { 
+        _posts = await PostService.GetPostsAsync(pageNo - 1);
+        NavManager.NavigateTo("/");
+    }
+    private void ViewPost(string postId)
+    {
+        NavManager.NavigateTo("/view/" + postId);
+    }
+    private async Task<IEnumerable<string>> Search1(string value)
+    { 
+        if (string.IsNullOrEmpty(value))
+            return _postsToSearch.Values;
+        return _postsToSearch.Values.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
+    }
+
+    void SearchPost()
+    {
+        var postId = _postsToSearch
+            .FirstOrDefault(x => 
+                x.Value.ToLower().Contains(_searchString.ToLower())).Key;
+        NavManager.NavigateTo("/view/" + postId);
+    }
+
+    async Task Cleanup()
+    {
+        _postsDeleted = await PostService.DbCleanup();
+    }
+
+    void AddNewPost()
+    {
+        NavManager.NavigateTo("/addNewPost");
+    }
+
+    private async Task FetchPosts()
+    {
+        var newPosts = await PostService.GetPostsByCount(_posts.Count);
+        _posts.AddRange(newPosts);
+    }
+}
