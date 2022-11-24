@@ -18,7 +18,7 @@
                 <ul>
                     @foreach (var post in _posts)
                     {
-                        <FeedPostPreview Post="@post"/>
+                        <FeedPostPreview Post="@post" Comments="post.Comments.Take(3).ToList()"/>
                     }
 
                     @*The target element that we observe. Once this is reached the callback will be triggered.*@
@@ -46,14 +46,7 @@
         Console.WriteLine("Прошло " + sw.ElapsedMilliseconds + " миллисекунд");
         sw.Stop(); 
     }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender)
-        {
-            
-        }
-    } 
+ 
 
     async Task GetPosts(int pageNo)
     { 

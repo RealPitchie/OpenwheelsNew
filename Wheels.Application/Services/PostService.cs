@@ -48,6 +48,7 @@ public class PostService : IPostService
     public async Task<List<Post>> GetPostsByCount(int offset)
     {
         return await _context.Posts
+            .Include(p => p.Comments)
             .OrderByDescending(p => p.Posted)
             .Skip(offset)
             .Take(5)

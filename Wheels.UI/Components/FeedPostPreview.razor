@@ -25,10 +25,7 @@
                      target="_blank" 
                      href=@("/view/" + post.Id)>
                      <h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @post.Title </h3>
-            </NavLink>
-            @* <a href="/feed" @onclick="() => ViewPost(post.Id)"> *@
-            @*     <h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @post.Title </h3></a> *@
-
+            </NavLink> 
             <div style="text-align: center">
                 <img alt="image" src=@("https:" + post.ImageFile[0]) style="max-width: 100%;">
             </div>
@@ -76,7 +73,8 @@
         </div>
          <PostRating Post="post" UpVote="() => VoteUp(post, _userId)" DownVote="() => VoteDown(post, _userId)"></PostRating>
         <div class="social-footer">
-            @foreach (var comment in post.Comments)
+            <MudLink Href=@("/view/" + post.Id + "/" + "comments") Typo="Typo.h6" Style="color: gray !important; cursor: pointer; text-decoration: none">Комментарии</MudLink>
+            @foreach (var comment in Comments)
             {
                 <div class="social-comment">
 
@@ -84,19 +82,11 @@
                         <a href="#">
                             @comment.Author
                         </a>
-                        @comment.Text
-                        <br> 
-                        <small class="text-muted">@comment.Posted.ToString("D"), @comment.Posted.ToShortTimeString()</small>
+                        <p style="font-size: smaller; margin: 0">@comment.Text</p>
+                        <small class="text-muted time">@comment.Posted.ToString("D"), @comment.Posted.ToShortTimeString()</small>
                     </div>
                 </div>
             }
-            @* <div class="social-comment"> *@
-            @*          *@
-            @*     <div class="media-body"> *@
-            @*         <textarea class="form-control" placeholder="Write comment..."></textarea> *@
-            @*     </div> *@
-            @* </div> *@
-        
         </div>
        
            
@@ -107,6 +97,8 @@
 @code {
     [Parameter]
     public Post post { get; set; } 
+    [Parameter]
+    public List<Comment> Comments { get; set; }
     MudMessageBox Mbox { get; set; }
     bool _showFullText;
     string? _userId = string.Empty;

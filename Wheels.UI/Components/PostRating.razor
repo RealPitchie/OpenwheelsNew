@@ -10,14 +10,26 @@
 </style>
 <div class="row" style="padding: 0 20px">
     <div style="display: flex; justify-content: space-between">
-    <MudIconButton Icon="@Icons.Material.Filled.Share" Size="Size.Small">Поделиться</MudIconButton>
+        <span style="display: flex; align-items: center">
+            <MudIconButton Icon="@Icons.Material.Filled.Share" Size="Size.Small" OnClick="ShowLink">Поделиться</MudIconButton>
+            
+        </span>
         <span>
             <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleUp" Color="Color.Success" Size="Size.Small" Style="width: 25px" OnClick="Up"/>
             <MudText Style=@_postRatingColor Class="ratingNumber" Typo="Typo.body1"> @Post.Rating</MudText>
             <MudIconButton Icon="@Icons.Material.Filled.ArrowCircleDown" Color="Color.Error" Size="Size.Small" Style="width: 25px" OnClick="Down"/>
                 
-        </span>    
+        </span>  
+        
     </div> 
+    @if (_showLink)
+    {
+        <div style="overflow-x: hidden">
+            <MudLink Href=@("https://openwheels.tk/view/" + @Post.Id) Typo="Typo.h6" Style="font-size: small">
+                https://openwheels.tk/view/@Post.Id
+            </MudLink>
+        </div>
+    }
 </div>
 @code {
     [Parameter]
@@ -26,6 +38,8 @@
     public EventCallback<Post> UpVote { get; set; }
     [Parameter]
     public EventCallback<Post> DownVote { get; set; }
+
+    private bool _showLink;
     string _postRatingColor = "";
     protected override void OnInitialized()
     {
@@ -40,4 +54,11 @@
     {
         DownVote.InvokeAsync(Post); 
     }
+
+    private void ShowLink()
+    {
+        _showLink = !_showLink;
+    }
+
+    
 }
