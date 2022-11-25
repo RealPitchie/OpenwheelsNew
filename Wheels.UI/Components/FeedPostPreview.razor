@@ -76,17 +76,17 @@
         </div>
          <PostRating Post="post" UpVote="() => VoteUp(post, _userId)" DownVote="() => VoteDown(post, _userId)"></PostRating>
         <div class="social-footer">
-            @foreach (var comment in post.Comments)
+            @foreach (var comment in post.Comments.OrderByDescending(c => c.Posted).Take(3))
             {
                 <div class="social-comment">
 
-                    <div class="media-body">
+                    <div class="media-body" style="font-size: x-small">
                         <a href="#">
                             @comment.Author
                         </a>
                         @comment.Text
                         <br> 
-                        <small class="text-muted">@comment.Posted.ToString("D"), @comment.Posted.ToShortTimeString()</small>
+                        <small class="text-muted">@comment.Posted.ToString("d"), @comment.Posted.ToString("t")</small>
                     </div>
                 </div>
             }
