@@ -1,10 +1,12 @@
 @page "/view/{postId}"
+@page "/view/{postId}/{showComments}"
 
 @using Wheels.Domain.Models
 @using Wheels.Application.Services
 @using Wheels.UI.Components
 
 @inject PostService PostService
+@inject IJSRuntime JSRuntime
 
 <div> 
     @if (_post == null)
@@ -43,12 +45,25 @@
 @code {
     [Parameter]
     public string PostId { get; set; }
-
+    [Parameter]
+    public string ShowComments { get; set; }
     Post _post = new();
     protected override async Task OnInitializedAsync()
     {
         _post = await PostService.GetPostAsync(PostId);
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender && ShowComments == "comments")
+        {
+            await JSRuntime.InvokeVoidAsync(
+                "scrollIntoView",
+                "commentsBlock"
+                );
+        }
+    }
+ 
 
     async Task SaveComment(Comment comment)
     {

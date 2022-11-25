@@ -3,7 +3,7 @@ body{margin-top:20px;
 }
 /* Social feed */
 .social-feed-separated .social-feed-box {
-    margin-left: 62px;
+    /*margin-left: 62px;*/
 }
 .social-feed-separated .social-avatar {
     float: left;
@@ -61,6 +61,10 @@ body{margin-top:20px;
     margin-bottom: 10px;
 }
 .social-footer {
+    align-items: flex-end;
+    display: flex;
+    justify-content: end;
+    flex-direction: column;
     border-top: 1px solid #e7eaec;
     padding: 10px 15px;
     background: #f9f9f9;
@@ -73,12 +77,19 @@ body{margin-top:20px;
     margin-top: 0;
 }
 .social-comment {
+    float: end;
+    max-width: 80%;
+    padding: 5px;
+    text-align: end;
     margin-top: 15px;
+    background-color: white;
 }
 .social-comment textarea {
     font-size: 12px;
 }
-
+.social-comment .time{
+    font-size: x-small;
+}
 
 .form-control, .single-line {
     background-color: #FFFFFF;
