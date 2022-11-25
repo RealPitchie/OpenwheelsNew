@@ -1,24 +1,76 @@
 ﻿@inherits LayoutComponentBase
 @inject AuthenticationStateProvider AuthenticationStateProvider
 
-<PageTitle>Wheels.UI</PageTitle>
-<MudThemeProvider/>
+<PageTitle>Wheels.UI</PageTitle> 
 <MudDialogProvider/>
 <MudSnackbarProvider/>
-<div class="page" style="flex-wrap: wrap; margin-bottom: 50px">
-    @* <div class="sidebar"> *@
-    <NavMenu />
-    @* </div> *@
 
-    <main> 
-        <CascadingValue Value="_userName">
-            <article class="content px-4" style="margin-left: 10%; padding: 0 !important;">
-                @Body
-            </article> 
-        </CascadingValue>
-    </main>
-</div>
+<MudLayout Style="padding: 0 !important;">
+    <MudAppBar Elevation="3">
+        <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" />
+        <MudSpacer />
+        @if (_isLightMode)
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Brightness4" Color="Color.Inherit" OnClick="ToggleTheme" />
+        }
+        else
+        {
+            <MudIconButton Icon="@Icons.Material.Filled.Brightness5" Color="Color.Inherit" OnClick="ToggleTheme" />
+        }
+    </MudAppBar>
+    <MudDrawer @bind-Open="_sidebarOpen" Elevation="1">
+        <MudDrawerHeader> 
+            <MudText Typo="Typo.h5" Color="Color.Primary" Style="margin-top:10px; margin-left:15px;">Wheels</MudText>
+        </MudDrawerHeader>
+    </MudDrawer>
+    <MudMainContent >
+        <MudContainer >
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+<MudThemeProvider Theme="_currentTheme" />
+@* <div class="page" style="flex-wrap: wrap; margin-bottom: 50px"> *@
+@*     $1$ <div class="sidebar"> #1# *@
+@*     <NavMenu /> *@
+@*     $1$ </div> #1# *@
+@* *@
+@*     <main>  *@
+@*         <CascadingValue Value="_userName"> *@
+@*             <article class="content px-4" style="margin-left: 10%; padding: 0 !important;"> *@
+@*                 @Body *@
+@*             </article>  *@
+@*         </CascadingValue> *@
+@*     </main> *@
+@* </div> *@
 @code{
+    private bool _sidebarOpen = false;
+    private void ToggleTheme(MudTheme changedTheme) => _currentTheme = changedTheme;
+    private void ToggleSidebar() => _sidebarOpen = !_sidebarOpen;
+    private MudTheme GenerateDarkTheme() =>
+        new MudTheme
+        {
+            Palette = new Palette()
+            {
+                Black = "#27272f",
+                Background = "#32333d",
+                BackgroundGrey = "#27272f",
+                Surface = "#373740",
+                TextPrimary = "#ffffffb3",
+                TextSecondary = "rgba(255,255,255, 0.50)",
+                AppbarBackground = "#27272f",
+                AppbarText = "#ffffffb3"
+            }
+        };
+    private bool _isLightMode = true;
+    private MudTheme _currentTheme = new MudTheme();
+    private void ToggleTheme()
+    {
+        _isLightMode = !_isLightMode;
+        _currentTheme = !_isLightMode ? GenerateDarkTheme() : new MudTheme();
+    }
+    
+    ///////////////1
     string _userName = string.Empty;
     protected override async Task OnInitializedAsync()
     {

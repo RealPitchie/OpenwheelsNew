@@ -12,8 +12,7 @@
 <link href="css/feed.css" rel="stylesheet" />
 @if (_posts.Count > 1)
 {
-    <div class="container"> 
-        <div style="max-width: 780px">
+    <MudPaper Style="max-width: 768px; text-align: center">  
             <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPosts()">
                 <ul>
                     @foreach (var post in _posts)
@@ -24,9 +23,8 @@
                     @*The target element that we observe. Once this is reached the callback will be triggered.*@
                     <li class="list-group-item"  id="observerTarget"></li>
                 </ul>
-            </InfiniteScroll>
-        </div>
-    </div>
+            </InfiniteScroll> 
+    </MudPaper>
 }
 @code {
     List<Post> _posts = new();
