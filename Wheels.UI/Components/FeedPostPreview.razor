@@ -14,9 +14,19 @@
          
         <div class="row" style="text-align: end; margin-right: 15px">
             <div class="social-avatar">
-                <a href="#" style="font-size: smaller">
-                    @post.Author
-                </a>
+                @if (string.IsNullOrEmpty(post.Author))
+                {
+                    <a href="https://f1news.ru" target="_blank" style="font-size: smaller">
+                        f1news.ru
+                    </a>
+                }
+                else
+                {
+                    <a href="#" style="font-size: smaller">
+                        @post.Author
+                    </a>
+                }
+                <br/>
                 <small style="font-size: x-small" class="text-muted">@post.Posted.ToString("D") - @post.Posted.ToShortTimeString()</small>
             </div>
         </div>
@@ -73,20 +83,13 @@
         </div>
          <PostRating Post="post" UpVote="() => VoteUp(post, _userId)" DownVote="() => VoteDown(post, _userId)"></PostRating>
         <div class="social-footer">
-            <MudLink Href=@("/view/" + post.Id + "/" + "comments") Typo="Typo.h6" Style="color: gray !important; cursor: pointer; text-decoration: none">Комментарии</MudLink>
-            @foreach (var comment in Comments)
-            {
-                <div class="social-comment">
-
-                    <div class="media-body">
-                        <a href="#">
-                            @comment.Author
-                        </a>
-                        <p style="font-size: smaller; margin: 0">@comment.Text</p>
-                        <small class="text-muted time">@comment.Posted.ToString("D"), @comment.Posted.ToShortTimeString()</small>
-                    </div>
-                </div>
-            }
+            <MudLink
+                Href=@("/view/" + post.Id + "/" + "comments")
+                Typo="Typo.h6"
+                Style="color: gray !important; cursor: pointer; text-decoration: none">
+                    Комментарии (@post.Comments.Count)
+            </MudLink>
+            
         </div>
        
            

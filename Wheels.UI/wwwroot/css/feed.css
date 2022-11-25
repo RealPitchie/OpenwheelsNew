@@ -77,8 +77,7 @@ body{margin-top:20px;
     margin-top: 0;
 }
 .social-comment {
-    float: end;
-    max-width: 80%;
+    float: end; 
     padding: 5px;
     text-align: end;
     margin-top: 15px;
@@ -87,7 +86,7 @@ body{margin-top:20px;
 .social-comment textarea {
     font-size: 12px;
 }
-.social-comment .time{
+ .time{
     font-size: x-small;
 }
 

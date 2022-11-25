@@ -23,7 +23,7 @@
                     <h4 style="text-align: right; color: darkgray; font-size: x-small">@_post.Posted.ToString("D")</h4>
                     @foreach (var line in _post.Text)
                     {
-                        <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+                        <MudText Style="margin-bottom: 10px" Typo="Typo.body1">
                             @line
                         </MudText>
                     }
@@ -31,7 +31,7 @@
 
 
             </div>
-            <div id="commentsBlock" class="col-md-8 comment-col" >
+            <div id="commentsBlock" class="col-md-8 comment-col" style="margin-left: 15px; margin-top: 25px" >
                 <Comments PostId="@_post.Id" />
                 <NewComment Post="_post" AddComment="SaveComment"/>
             </div>
@@ -43,6 +43,7 @@
 </div>
 
 @code {
+    
     [Parameter]
     public string PostId { get; set; }
     [Parameter]
