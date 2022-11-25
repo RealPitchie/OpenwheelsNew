@@ -1,4 +1,5 @@
 ﻿@inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <PageTitle>Wheels.UI</PageTitle>
 <MudThemeProvider/>
@@ -10,9 +11,25 @@
     @* </div> *@
 
     <main> 
-    
-         <article class="content px-4" style="margin-left: 10%">
-            @Body
-        </article> 
+        <CascadingValue Value="_userName">
+            <article class="content px-4" style="margin-left: 10%">
+                @Body
+            </article> 
+        </CascadingValue>
     </main>
 </div>
+@code{
+    string _userName = string.Empty;
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var claims = user.Claims;
+
+        if (user.Identity is {IsAuthenticated: true })
+        {
+            _userName = user.FindFirst(c => c.Type == "Nickname")?.Value;
+        }
+    }
+
+}

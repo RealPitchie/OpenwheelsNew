@@ -1,0 +1,17 @@
+@using Wheels.Domain.Models
+<link href="css/feed.css" rel="stylesheet"/>
+<div class="social-comment">
+
+    <div class="media-body">
+        <a style="font-size: small" >
+            @Comment.Author
+        </a>
+        <p style="font-size: smaller; margin: 0">@Comment.Text</p>
+        <span class="time">@Comment.Posted.ToString("D"), @Comment.Posted.ToShortTimeString()</span>
+        <MudDivider Light="true" Style="margin-bottom: 10px" />
+    </div>
+</div>
+@code {
+    [Parameter]
+    public Comment Comment { get; set; }     
+}

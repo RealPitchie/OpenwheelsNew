@@ -10,6 +10,8 @@
 
 
 @code {
+    [CascadingParameter]
+    protected string Username { get; set; }
     [Parameter]
     public Post Post { get; set; }
     [Parameter]
@@ -18,6 +20,8 @@
     
     public void Submit()
     {
+        _newComment.Author = Username;
+        _newComment.Posted = DateTime.Now;
         AddComment.InvokeAsync(_newComment);
         NavManager.NavigateTo("/view/" + Post.Id, true);
     }
