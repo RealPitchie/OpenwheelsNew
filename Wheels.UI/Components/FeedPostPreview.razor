@@ -11,80 +11,80 @@
 @inject ISnackbar Snackbar 
 <MudPaper style="text-align: end; padding: 15px; margin-bottom: 20px; ">
              
-                @if (string.IsNullOrEmpty(post.Author))
-                {
-                    <a href="https://f1news.ru" target="_blank" style="font-size: smaller">
-                        f1news.ru
-                    </a>
-                }
-                else
-                {
-                    <a href="#" style="font-size: smaller">
-                        @post.Author
-                    </a>
-                }
-                <br/>
-                <small style="font-size: x-small" class="text-muted">@post.Posted.ToString("D") - @post.Posted.ToShortTimeString()</small>
-            
-            <NavLink class="MyCssClass" 
-                     target="_blank" 
-                     href=@("/view/" + post.Id)>
-                     <h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @post.Title </h3>
-            </NavLink> 
-            <div style="text-align: center">
-                <img alt="image" src=@("https:" + post.ImageFile[0]) style="max-width: 100%;">
-            </div>
-            @if (_showFullText)
+    @if (string.IsNullOrEmpty(post.Author))
+    {
+        <a href="https://f1news.ru" target="_blank" style="font-size: smaller">
+            f1news.ru
+        </a>
+    }
+    else
+    {
+        <a href="#" style="font-size: smaller">
+            @post.Author
+        </a>
+    }
+    <br/>
+    <small style="font-size: x-small" class="text-muted">@post.Posted.ToString("D") - @post.Posted.ToShortTimeString()</small>
+    
+    <NavLink class="MyCssClass" 
+             target="_blank" 
+             href=@("/view/" + post.Id)>
+             <h3 style="text-align: center; margin: 15px auto; font-weight: bold"> @post.Title </h3>
+    </NavLink> 
+    <div style="text-align: center">
+        <img alt="image" src=@("https:" + post.ImageFile[0]) style="max-width: 100%;">
+    </div>
+    @if (_showFullText)
+    {
+        @foreach (var line in post.Text)
+        {
+            <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+                @line
+            </MudText>
+        }
+    }
+    else
+    {
+        foreach (var line in post.Text.Take(2))
+        {
+            <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+                @line
+            </MudText>
+        }
+    }
+    <div class="row" style=" margin-bottom: 15px">
+        <div class="col">
+            @if (post.Text.Length > 2 && !_showFullText)
             {
-                @foreach (var line in post.Text)
-                {
-                    <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
-                        @line
-                    </MudText>
-                }
+                <MudButton Variant="Variant.Text" OnClick="() => ToggleView()" Style="font-size: small" Color="Color.Tertiary">Развернуть</MudButton>
             }
-            else
-            {
-                foreach (var line in post.Text.Take(2))
-                {
-                    <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
-                        @line
-                    </MudText>
-                }
-            }
-            <div class="row" style=" margin-bottom: 15px">
-                <div class="col">
-                    @if (post.Text.Length > 3 && !_showFullText)
-                    {
-                        <MudButton Variant="Variant.Text" OnClick="() => ToggleView()" Style="font-size: small" Color="Color.Tertiary">Развернуть</MudButton>
-                    }
-                </div>
+        </div>
 
-                <MudMessageBox @ref="Mbox" Title="Внимание" CancelText="Cancel">
-                    <MessageContent>
-                        Вы действительно хотите удалить этот пост?
-                    </MessageContent>
-                    <YesButton>
-                        <MudButton Size="Size.Small" Variant="Variant.Text" Color="Color.Error">Удалить</MudButton>
-                    </YesButton>
-                    <CancelButton>
-                        <MudButton Size="Size.Small" Variant="Variant.Text">Отмена</MudButton>
-                    </CancelButton>
-                </MudMessageBox>
+        <MudMessageBox @ref="Mbox" Title="Внимание" CancelText="Cancel">
+            <MessageContent>
+                Вы действительно хотите удалить этот пост?
+            </MessageContent>
+            <YesButton>
+                <MudButton Size="Size.Small" Variant="Variant.Text" Color="Color.Error">Удалить</MudButton>
+            </YesButton>
+            <CancelButton>
+                <MudButton Size="Size.Small" Variant="Variant.Text">Отмена</MudButton>
+            </CancelButton>
+        </MudMessageBox>
 
 
 
-            </div>  
-         <PostRating Post="post" UpVote="() => VoteUp(post, _userId)" DownVote="() => VoteDown(post, _userId)"></PostRating>
-        
-            <MudLink
-                Href=@("/view/" + post.Id + "/" + "comments")
-                Typo="Typo.h6"
-                Style="color: gray !important; cursor: pointer; text-decoration: none">
-                    Комментарии (@post.Comments.Count)
-            </MudLink>
-            
-        </MudPaper>  
+    </div>  
+ <PostRating Post="post" UpVote="() => VoteUp(post, _userId)" DownVote="() => VoteDown(post, _userId)"></PostRating>
+
+    <MudLink
+        Href=@("/view/" + post.Id + "/" + "comments")
+        Typo="Typo.h6"
+        Style="color: gray !important; cursor: pointer; text-decoration: none">
+            Комментарии (@post.Comments.Count)
+    </MudLink>
+    
+</MudPaper>  
 @code {
     [Parameter]
     public Post post { get; set; } 

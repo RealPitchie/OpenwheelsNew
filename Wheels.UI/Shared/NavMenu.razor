@@ -1,5 +1,5 @@
 ﻿@inject NavigationManager NavManager
-<MudDrawer style="top: 0" @bind-Open="SideBarOpen" Elevation="1">
+<MudDrawer Variant="DrawerVariant.Temporary" style="top: 0" @bind-Open="SideBarOpen" Elevation="1">
     <MudDrawerHeader>
         @* <MudAvatar Color="Color.Transparent" Size="Size.Large" Image="assets/Logo-CodeMaze.png" /> *@
         <MudText Typo="Typo.h5" Color="Color.Primary" Style="margin-top:10px; margin-left:15px;">wheels</MudText>
@@ -19,5 +19,5 @@
 @code {
     [Parameter]
     public bool SideBarOpen { get; set; }
- 
+    
 }
