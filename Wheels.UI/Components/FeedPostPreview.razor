@@ -9,7 +9,7 @@
 @inject NavigationManager NavManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
 @inject ISnackbar Snackbar 
-        <MudPaper style="text-align: end; padding: 15px ">
+<MudPaper style="text-align: end; padding: 15px; margin-bottom: 20px; ">
              
                 @if (string.IsNullOrEmpty(post.Author))
                 {
@@ -84,8 +84,7 @@
                     Комментарии (@post.Comments.Count)
             </MudLink>
             
-        </MudPaper> 
-<MudDivider Light="true" Style="margin: 25px auto"></MudDivider>
+        </MudPaper>  
 @code {
     [Parameter]
     public Post post { get; set; } 

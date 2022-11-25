@@ -12,7 +12,7 @@
 <link href="css/feed.css" rel="stylesheet" />
 @if (_posts.Count > 1)
 {
-    <MudPaper Style="max-width: 768px; text-align: center">  
+    <MudContainer  Style="max-width: 768px; text-align: center;  margin: 20px auto" >  
             <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPosts()">
                 <ul>
                     @foreach (var post in _posts)
@@ -24,7 +24,7 @@
                     <li class="list-group-item"  id="observerTarget"></li>
                 </ul>
             </InfiniteScroll> 
-    </MudPaper>
+    </MudContainer>
 }
 @code {
     List<Post> _posts = new();

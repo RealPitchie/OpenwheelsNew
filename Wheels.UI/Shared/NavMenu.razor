@@ -1,136 +1,23 @@
-﻿@using System.Security.Claims
-@using Microsoft.AspNetCore.Identity
-@using Wheels.UI.Data 
-
-@inject AuthenticationStateProvider AuthenticationStateProvider
-@inject NavigationManager NavManager
-
-<link href="css/sidebar.css" rel="stylesheet"/> 
-
-
-<MudPaper Width="250px" Class="d-inline-flex py-3" Elevation="0">
-    <MudNavMenu Class="mud-width-full">
-        <MudText Typo="Typo.h6" Class="px-4">Font Awesome</MudText>
-        <MudText Typo="Typo.body2" Class="px-4 mud-text-secondary">Icons</MudText>
-        <MudDivider Class="my-2" />
-        <MudNavLink Href="/dashboard" Icon="fas fa-chart-line">Dashboard</MudNavLink>
-        <MudNavLink Href="/servers" Icon="fas fa-server">Servers</MudNavLink>
-        <MudNavLink Href="/billing" Icon="fas fa-receipt" Disabled="true">Billing</MudNavLink>
-        <MudNavGroup Title="Settings" Icon="fas fa-cogs" Expanded="true">
-            <MudNavLink Href="/users" Icon="fas fa-users" IconColor="Color.Success">Users</MudNavLink>
-            <MudNavLink Href="/security" Icon="fas fa-user-shield" IconColor="Color.Info">Security</MudNavLink>
-        </MudNavGroup>
+﻿@inject NavigationManager NavManager
+<MudDrawer style="top: 0" @bind-Open="SideBarOpen" Elevation="1">
+    <MudDrawerHeader>
+        @* <MudAvatar Color="Color.Transparent" Size="Size.Large" Image="assets/Logo-CodeMaze.png" /> *@
+        <MudText Typo="Typo.h5" Color="Color.Primary" Style="margin-top:10px; margin-left:15px;">wheels</MudText>
+    </MudDrawerHeader>
+    <MudNavMenu>
+        <MudNavLink Href="/"  Match="NavLinkMatch.All" Icon="@Icons.Filled.Home">Главная</MudNavLink>
+        <MudNavLink Href="/feed" Icon="@Icons.Filled.Storage">Лента</MudNavLink>
+        @* <MudNavGroup Title="Expanding" Icon="@Icons.Filled.DashboardCustomize" Expanded="true"> *@
+        @*     <MudNavLink Href="#" Icon="@Icons.Filled.Camera">Photos</MudNavLink> *@
+        @*     <MudNavLink Href="#" Icon="@Icons.Filled.Celebration">Party</MudNavLink> *@
+        @* </MudNavGroup> *@
+        <MudSpacer />
+        <MudDivider Light="true" />
+        <MudNavLink Href="/addNewPost" Icon="@Icons.Filled.Storage">Новый пост</MudNavLink>
     </MudNavMenu>
-</MudPaper>
-@* <nav class="main-menu"> *@
-@*     <ul> *@
-@*         <li> *@
-@*             <a href="/"> *@
-@*                 <i class="fa fa-home fa-2x"></i> *@
-@*                 <span class="nav-text"> *@
-@*                     Главная *@
-@*                 </span> *@
-@*             </a> *@
-@*            *@
-@*         </li> *@
-@*         <li class="has-subnav" @onclick="ToggleNavMenu"> *@
-@*             <a href="/feed"> *@
-@*                 <i class="fa fa-rss fa-2x"></i> *@
-@*                 <span class="nav-text"> *@
-@*                     Лента *@
-@*                 </span> *@
-@*             </a> *@
-@*              *@
-@*         </li>  *@
-@*     </ul> *@
-@* *@
-@*     <ul class="logout">  *@
-@*             <AuthorizeView> *@
-@*                 <Authorized> *@
-@*                     <li> *@
-@*                         <a href="/manageAccount" style=" align-items: center"> *@
-@*                            <i class="fa fa-user fa-2x"></i> *@
-@*                            <span class="nav-text"> *@
-@*                                @_userName *@
-@*                            </span> *@
-@*                         </a> *@
-@*                     </li> *@
-@*                     <li> *@
-@*                         <MudLink style="color: #F8F8FF !important; cursor: pointer; text-decoration: none; align-items: center" @onclick="() => SignOut()"> *@
-@*                             <i class="fa fa-sign-out fa-2x"></i> *@
-@*                             <span class="nav-text"> *@
-@*                                 Выход *@
-@*                             </span> *@
-@*                         </MudLink> *@
-@*                     </li> *@
-@*                 </Authorized> *@
-@*                 <NotAuthorized> *@
-@*                     <li> *@
-@*                         <a href="/register"> *@
-@*                             <i class="fa fa-user" aria-hidden="true"></i> *@
-@*                             <span class="nav-text"> *@
-@*                                 Регистрация *@
-@*                             </span> *@
-@*                         </a> *@
-@*                     </li> *@
-@*                     <li> *@
-@*                          <a href="/login"> *@
-@*                            <i class="fa fa-sign-in" aria-hidden="true"></i> *@
-@*                             <span class="nav-text"> *@
-@*                                 Вход *@
-@*                             </span> *@
-@*                         </a> *@
-@*                     </li>  *@
-@*                 </NotAuthorized> *@
-@*             </AuthorizeView>  *@
-@*          *@
-@*     </ul> *@
-@* </nav> *@
- <MudMessageBox @ref="mbox"  CancelText="Cancel">
-     <TitleContent>
-         <MudText Typo="Typo.h6" Style="color: red">Внимание</MudText>
-     </TitleContent>
-     <MessageContent>
-         <p style="font-size: smaller">Вы действительно хотите выйти?</p>
-     </MessageContent>
-     <YesButton>
-         <MudButton Style="font-size: x-small; color: red" Size="Size.Small" Variant="Variant.Text">
-             выйти
-         </MudButton>
-     </YesButton>
-     <CancelButton>
-         <MudButton Style="font-size: x-small"  Size="Size.Small" Variant="Variant.Text" >Отмена</MudButton>
-     </CancelButton>
- </MudMessageBox>
+</MudDrawer>
 @code {
-    MudMessageBox mbox { get; set; }
-    private bool _collapseNavMenu = true; 
-    private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
-    string? _userName = "";
-
-    protected override async Task OnInitializedAsync()
-    {
-        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        var claims = user.Claims;
-
-        if (user.Identity is {IsAuthenticated: true })
-        {
-            _userName = user.FindFirst(c => c.Type == "Nickname")?.Value;
-        }
-    }
-
-    async Task SignOut()
-    {
-        var result = await mbox.Show();
-        if (result == true)
-        {
-            NavManager.NavigateTo("/logout", true);
-        }
-    }
-    private void ToggleNavMenu()
-    {
-        _collapseNavMenu = !_collapseNavMenu;
-    }
-
+    [Parameter]
+    public bool SideBarOpen { get; set; }
+ 
 }

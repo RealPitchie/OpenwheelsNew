@@ -80,7 +80,7 @@
        </div>
    }
 </div>
-<MudFab OnClick="AddNewPost" Class="newPostButton" Color="Color.Success" StartIcon="@Icons.Material.Filled.Add" />
+ 
 @code{
     List<Post> _posts = new();
     List<Post> _topRatedPosts = new();
@@ -129,8 +129,5 @@
         _postsDeleted = await PostService.DbCleanup();
     }
 
-    void AddNewPost()
-    {
-        NavManager.NavigateTo("/addNewPost");
-    }
+    
 }
