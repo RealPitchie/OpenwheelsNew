@@ -10,22 +10,26 @@
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
 <link href="css/feed.css" rel="stylesheet" />
-@if (_posts.Count > 1)
-{
-    <MudContainer  Style="max-width: 768px; text-align: center;  margin: 20px auto" >  
-            <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPosts()">
-                <ul>
-                    @foreach (var post in _posts)
-                    {
-                        <FeedPostPreview Post="@post" Comments="post.Comments.Take(3).ToList()"/>
-                    }
-
-                    @*The target element that we observe. Once this is reached the callback will be triggered.*@
-                    <li class="list-group-item"  id="observerTarget"></li>
-                </ul>
-            </InfiniteScroll> 
-    </MudContainer>
-}
+<div class="row" style=" margin: 0 auto">
+    <div class="col-md-8">
+        @if (_posts.Count > 1)
+        {
+            <MudContainer Style="max-width: 768px; text-align: center;  margin: 20px auto" >  
+                    <InfiniteScroll ObserverTargetId="observerTarget" ObservableTargetReached="(e) => FetchPosts()">
+                        <ul>
+                            @foreach (var post in _posts)
+                            {
+                                <FeedPostPreview Post="@post" Comments="post.Comments.Take(3).ToList()"/>
+                            }
+        
+                            @*The target element that we observe. Once this is reached the callback will be triggered.*@
+                            <li class="list-group-item"  id="observerTarget"></li>
+                        </ul>
+                    </InfiniteScroll> 
+            </MudContainer>
+        }
+    </div>
+</div>
 @code {
     List<Post> _posts = new();
     List<Post> _topRatedPosts = new();

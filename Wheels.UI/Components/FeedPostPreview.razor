@@ -38,7 +38,7 @@
     {
         @foreach (var line in post.Text)
         {
-            <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+            <MudText Style="margin-bottom: 10px; text-align: start" Typo="Typo.body2">
                 @line
             </MudText>
         }
@@ -47,7 +47,7 @@
     {
         foreach (var line in post.Text.Take(2))
         {
-            <MudText Style="margin-bottom: 10px" Typo="Typo.body2">
+            <MudText Style="margin-bottom: 10px; text-align: start" Typo="Typo.body2">
                 @line
             </MudText>
         }
